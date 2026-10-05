@@ -1,0 +1,20 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+env.js
+
+# macOS files
+.DS_Store
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+

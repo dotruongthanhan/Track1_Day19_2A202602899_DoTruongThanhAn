@@ -1,0 +1,3786 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khoá học AI Product</title>
+  <script src="./env.js"></script>
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-subtle: #edf2f7;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --primary-blue: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent-purple: #7c3aed;
+      --accent-red: #dc2626;
+      --tag-active-bg: #eff6ff;
+      --tag-active-text: #1d4ed8;
+      --highlight-color: #fef08a;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--text-main);
+      background-color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      height: 52px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: #ffffff;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 55%;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+      padding: 4px;
+      border-radius: 6px;
+    }
+    .back-btn:hover { background-color: #f1f5f9; }
+
+    .nav-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 2px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .lang-item {
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #64748b;
+    }
+    .lang-item.active {
+      background-color: var(--accent-red);
+      color: #ffffff;
+    }
+
+    .progress-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .progress-bar-track {
+      width: 72px;
+      height: 6px;
+      background-color: #cbd5e1;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar-fill {
+      width: 50%;
+      height: 100%;
+      background-color: var(--primary-blue);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .nav-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-pill-btn:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .nav-pill-btn.ai-btn {
+      color: #6366f1;
+      border-color: #e0e7ff;
+      background: #faf5ff;
+    }
+    .nav-pill-btn.ai-btn:hover {
+      background: #f3e8ff;
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #2563eb;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    /* Main Layout Body */
+    .app-main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Sidebar */
+    .left-sidebar {
+      width: 260px;
+      min-width: 240px;
+      border-right: 1px solid var(--border-color);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .left-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .curriculum-menu-list {
+      list-style: none;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .menu-item-card {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      position: relative;
+    }
+    .menu-item-card:hover {
+      background-color: #f8fafc;
+      border-color: #e2e8f0;
+    }
+    .menu-item-card.active {
+      background-color: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .item-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .item-title-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .menu-item-card.active .item-title-text {
+      color: #1d4ed8;
+    }
+    .item-desc-text {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-left: 24px;
+      line-height: 1.4;
+    }
+    .badge-pill {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .badge-pill.active {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .badge-pill.ready {
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    /* Center Content Area */
+    .center-content {
+      flex: 1;
+      overflow-y: auto;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* VIEW 1: PDF Single-Slide Presentation Viewer */
+    .viewer-topbar {
+      height: 48px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+    }
+
+    .viewer-file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .file-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      background: #f8fafc;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ctrl-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .ctrl-btn:hover:not(:disabled) {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .ctrl-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .slide-select-box {
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: #ffffff;
+      color: #1e293b;
+      outline: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .module-nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .module-tab-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      color: #475569;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .module-tab-chip:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .module-tab-chip.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    /* Single Slide Stage: 1 Slide duy nhất mở từ trái sang phải */
+    .slide-single-stage {
+      flex: 1;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: #090d16;
+    }
+
+    .slide-frame-card {
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-single-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    /* Stage Navigation Overlays (Mũi tên điều hướng trái/phải trên màn hình slide) */
+    .stage-nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.75);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .stage-nav-arrow:hover:not(:disabled) {
+      background: rgba(37, 99, 235, 0.9);
+      transform: translateY(-50%) scale(1.08);
+      border-color: #60a5fa;
+    }
+    .stage-nav-arrow:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+    .stage-nav-arrow.prev { left: 18px; }
+    .stage-nav-arrow.next { right: 18px; }
+
+    /* Slide Info Bar below canvas */
+    .slide-stage-footer {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #94a3b8;
+      font-size: 12px;
+      padding: 0 4px;
+    }
+    .slide-title-label {
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slide-nav-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+    }
+    .kbd-chip {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      font-size: 10.5px;
+      font-family: monospace;
+    }
+
+    /* Thumbnail Strip at bottom */
+    .thumbnails-strip {
+      height: 84px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .thumb-card {
+      min-width: 96px;
+      height: 56px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      position: relative;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .thumb-card:hover {
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+    }
+    .thumb-card.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+    }
+    .thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 3px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffffff;
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    /* VIEW 2: Document View */
+    .document-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 48px;
+      background: #ffffff;
+    }
+    .markdown-doc-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      color: #1e293b;
+    }
+    .doc-main-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .doc-subtitle {
+      font-size: 15px;
+      color: #64748b;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .doc-callout {
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .doc-callout.primary {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #2563eb;
+    }
+    .doc-callout.note {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      border-left: 4px solid #eab308;
+      color: #854d0e;
+    }
+    .callout-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: #2563eb;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+    .doc-divider {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 32px 0;
+    }
+    .doc-sec-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 36px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 8px;
+    }
+    .doc-sub-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .doc-paragraph {
+      font-size: 14.5px;
+      color: #334155;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .doc-unordered-list, .doc-ordered-list {
+      padding-left: 24px;
+      margin-bottom: 20px;
+    }
+    .doc-unordered-list li, .doc-ordered-list li {
+      font-size: 14.5px;
+      color: #334155;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .doc-unordered-list li.nested-li {
+      margin-left: 18px;
+      list-style-type: circle;
+      color: #475569;
+    }
+    .doc-formula-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+    .formula-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #60a5fa;
+      margin-bottom: 6px;
+    }
+    .formula-text {
+      font-size: 15px;
+      font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #f8fafc;
+      line-height: 1.5;
+    }
+
+    /* Right Sidebar: 1:1 Split (Take-note + AI Chat) */
+    .right-sidebar {
+      width: 360px;
+      min-width: 360px;
+      border-left: 1px solid var(--border-color);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.25s ease,
+                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      will-change: width, min-width, opacity;
+    }
+    .right-sidebar.collapsed {
+      width: 0 !important;
+      min-width: 0 !important;
+      opacity: 0;
+      border-left: none;
+      pointer-events: none;
+      transform: translateX(100%);
+    }
+    .close-sidebar-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      transition: all 0.15s ease;
+    }
+    .close-sidebar-btn:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      border-color: #e2e8f0;
+    }
+
+    /* Half 1: User Take Note Area (Top 50%) */
+    .note-panel {
+      flex: 1;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 2px solid var(--border-color);
+      background: #fafafa;
+      position: relative;
+    }
+    .panel-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .counter-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    .counter-badge.reached {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+    .note-toolbar {
+      padding: 6px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tool-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tool-btn:hover { background: #f1f5f9; }
+    .note-editor-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 14px;
+      overflow-y: auto;
+    }
+    .note-textarea {
+      width: 100%;
+      flex: 1;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.6;
+      background: transparent;
+      color: #1e293b;
+    }
+    .note-textarea::placeholder {
+      color: #94a3b8;
+      font-style: italic;
+    }
+    .proactive-nudge-box {
+      margin: 8px 12px 12px;
+      padding: 10px 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      animation: fadeIn 0.3s ease;
+    }
+    .nudge-text {
+      font-size: 12px;
+      color: #1e3a8a;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nudge-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .nudge-btn {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+    .nudge-btn.confirm {
+      background: var(--primary-blue);
+      color: white;
+    }
+    .nudge-btn.confirm:hover { background: var(--primary-hover); }
+    .nudge-btn.postpone {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .nudge-btn.postpone:hover { background: #cbd5e1; }
+
+    /* Half 2: AI Slide Chat Area (Bottom 50%) */
+    .chat-panel {
+      flex: 1;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      position: relative;
+    }
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #64748b;
+    }
+    .chat-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+    .chat-action-btn:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .chat-messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .empty-state-greeting {
+      margin: auto;
+      text-align: center;
+      max-width: 280px;
+    }
+    .empty-greeting-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .empty-greeting-sub {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    .chip {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #0369a1;
+    }
+    .chat-bubble {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+      max-width: 92%;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: #2563eb;
+      color: white;
+      border-bottom-right-radius: 2px;
+    }
+    .chat-bubble.assistant {
+      align-self: flex-start;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+      border-bottom-left-radius: 2px;
+      max-width: 96%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .chat-bubble.assistant p {
+      margin: 6px 0;
+      line-height: 1.65;
+    }
+    .chat-bubble.assistant ul, .chat-bubble.assistant ol {
+      margin: 6px 0 10px 18px;
+      padding-left: 0;
+      line-height: 1.65;
+    }
+    .chat-bubble.assistant li {
+      margin-bottom: 5px;
+    }
+    .chat-bubble.synthesis-card {
+      align-self: stretch;
+      max-width: 100%;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+    .synthesis-card-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-input-area {
+      padding: 10px 14px 12px;
+      border-top: 1px solid var(--border-color);
+      background: #ffffff;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 4px 6px 4px 14px;
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      background: transparent;
+      color: #1e293b;
+    }
+    .chat-send-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chat-send-btn.active {
+      background: var(--primary-blue);
+      color: white;
+    }
+    .disclaimer-text {
+      text-align: center;
+      font-size: 10.5px;
+      color: #94a3b8;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* Floating Reopen Button */
+    .reopen-sidebar-tab {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-right: none;
+      box-shadow: -3px 4px 14px rgba(0, 0, 0, 0.08);
+      border-radius: 8px 0 0 8px;
+      padding: 12px 7px;
+      cursor: pointer;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 40;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #334155;
+    }
+    .reopen-sidebar-tab.visible {
+      display: flex;
+      animation: slideInTab 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reopen-sidebar-tab:hover {
+      background: #eff6ff;
+      color: var(--primary-blue);
+      box-shadow: -4px 6px 16px rgba(37, 99, 235, 0.16);
+      padding-left: 10px;
+    }
+    .reopen-sidebar-tab .tab-label {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @keyframes slideInTab {
+      from { transform: translate(100%, -50%); opacity: 0; }
+      to { transform: translate(0, -50%); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
+    
+    /* ================= Floating Highlight Toolbar (Position Fixed & High Z-Index) ================= */
+    .highlight-floating-toolbar {
+      position: fixed !important;
+      z-index: 99999 !important;
+      background: #ffffff !important;
+      border: 1px solid #d1d5db !important;
+      border-radius: 12px !important;
+      padding: 4px 6px !important;
+      display: none;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.2), 0 4px 10px -2px rgba(0, 0, 0, 0.1) !important;
+      user-select: none !important;
+      pointer-events: auto !important;
+    }
+
+    .hl-item-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      color: #334155;
+      padding: 0;
+      outline: none;
+    }
+    .hl-item-box:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+    .hl-item-box:active {
+      transform: translateY(0);
+    }
+
+    .hl-color-pill {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: block;
+      pointer-events: none;
+    }
+    .hl-color-pill.blue { background-color: #7dd3fc; }
+    .hl-color-pill.pink { background-color: #fbcfe8; }
+    .hl-color-pill.green { background-color: #86efac; }
+    .hl-color-pill.yellow { background-color: #fde047; }
+
+    .hl-item-box.trash-btn {
+      color: #ef4444;
+    }
+    .hl-item-box.trash-btn:hover {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    /* Highlight Marks with interactive hover & cursor */
+    mark.user-highlight-blue, .user-highlight-blue {
+      background-color: #bae6fd !important;
+      color: #0f172a !important;
+      border-radius: 3px;
+      padding: 1px 3px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    mark.user-highlight-pink, .user-highlight-pink {
+      background-color: #fbcfe8 !important;
+      color: #0f172a !important;
+      border-radius: 3px;
+      padding: 1px 3px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    mark.user-highlight-green, .user-highlight-green {
+      background-color: #bbf7d0 !important;
+      color: #0f172a !important;
+      border-radius: 3px;
+      padding: 1px 3px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    mark.user-highlight-yellow, .user-highlight-yellow {
+      background-color: #fef08a !important;
+      color: #0f172a !important;
+      border-radius: 3px;
+      padding: 1px 3px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    mark[class*="user-highlight"]:hover {
+      filter: brightness(0.92);
+      outline: 1.5px dashed rgba(15, 23, 42, 0.4);
+    }
+
+    /* Mini Toast Notification */
+    .hl-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 10px 25px -3px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100000;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hl-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Slide Selectable Text Area for Lesson 1 */
+    .slide-text-highlight-panel {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 14px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .slide-text-panel-header {
+      padding: 10px 16px;
+      background: #162032;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #93c5fd;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .slide-text-panel-body {
+      padding: 16px 20px;
+      color: #f1f5f9;
+      font-size: 14px;
+      line-height: 1.7;
+      user-select: text !important;
+      cursor: text;
+    }
+    .slide-text-panel-body p {
+      margin-bottom: 8px;
+    }
+    .slide-text-panel-body p:last-child {
+      margin-bottom: 0;
+    }
+*/
+    .user-highlight-blue {
+      background-color: #bae6fd;
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .user-highlight-pink {
+      background-color: #fbcfe8;
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .user-highlight-green {
+      background-color: #bbf7d0;
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+    .user-highlight-yellow {
+      background-color: #fef08a;
+      border-radius: 3px;
+      padding: 1px 2px;
+    }
+
+    /* Slide Text Drawer for highlighting in Lesson 1 */
+    .slide-text-accordion {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 10px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .slide-text-toggle {
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #94a3b8;
+      font-size: 11.5px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .slide-text-toggle:hover {
+      color: #e2e8f0;
+      background: #243044;
+    }
+    .slide-text-content {
+      padding: 12px 16px;
+      color: #e2e8f0;
+      font-size: 13px;
+      line-height: 1.6;
+      border-top: 1px solid #334155;
+      user-select: text;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(6px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+
+    /* ================= AI Synthesis Modals ================= */
+    .ai-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInModal 0.2s ease;
+    }
+    .ai-modal-backdrop.active {
+      display: flex;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .ai-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ai-modal-box.ai-modal-lg {
+      max-width: 820px;
+      max-height: 85vh;
+    }
+    @keyframes slideUpModal {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .ai-modal-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+    }
+    .ai-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .ai-modal-badge.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .ai-modal-close {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    .ai-modal-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .ai-modal-body {
+      padding: 20px 24px;
+    }
+    .ai-modal-question {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .ai-modal-desc {
+      font-size: 13.5px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .ai-modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .ai-tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ai-tag.tag-notes {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .ai-tag.tag-hl {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .ai-tag.tag-source {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .ai-modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #f8fafc;
+    }
+    .modal-btn {
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .modal-btn.btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      border: 1px solid #1d4ed8;
+    }
+    .modal-btn.btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .modal-btn.btn-secondary {
+      background: #ffffff;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .modal-btn.btn-secondary:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .ai-modal-loading {
+      padding: 48px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3.5px solid #e2e8f0;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spinModal 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spinModal {
+      to { transform: rotate(360deg); }
+    }
+    .ai-modal-result-content {
+      padding: 24px 28px;
+      overflow-y: auto;
+      max-height: 58vh;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.7;
+    }
+
+  
+    /* Chat Bubble Markdown Styling */
+    .chat-bubble.assistant h2, .chat-bubble.assistant h3, .chat-bubble.assistant h4 {
+      margin: 10px 0 6px 0;
+      color: #0f172a;
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+    .chat-bubble.assistant h3 {
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 3px;
+    }
+    .chat-bubble.assistant ul {
+      margin: 6px 0 10px 18px;
+      padding-left: 0;
+    }
+    .chat-bubble.assistant li {
+      margin-bottom: 5px;
+      line-height: 1.6;
+      color: #334155;
+    }
+    .chat-bubble.assistant p {
+      margin: 6px 0;
+      line-height: 1.6;
+      color: #334155;
+    }
+    .chat-bubble.assistant code {
+      background: #e2e8f0;
+      color: #0369a1;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .chat-bubble.assistant strong {
+      color: #0f172a;
+    }
+    .chat-action-btn {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .chat-action-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    .chat-action-btn.primary {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+    }
+    .chat-action-btn.primary:hover {
+      background: #1d4ed8;
+    }
+    .ai-pulse-dot {
+      display: inline-block;
+      color: #2563eb;
+      animation: pulseGlow 1.2s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.3; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <button class="back-btn" title="Quay lại">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <span class="nav-title" id="pageNavTitle">Khoá học AI Product · 1. Tư duy product (PDF Slide)</span>
+    </div>
+
+    <div class="nav-right">
+      <div class="lang-switcher">
+        <span class="lang-item">EN</span>
+        <span class="lang-item active">VI</span>
+      </div>
+
+      <div class="progress-wrapper">
+        <span id="progressText">1/2 bài học</span>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+
+      <button class="nav-pill-btn" id="btnGeminiSettings" title="Cài đặt kết nối Gemini 3.5 Flash" style="border-color: #a7f3d0; background: #ecfdf5; color: #065f46;">
+        <span style="color:#059669; font-size: 13px;">✦</span> <strong>Gemini Flash</strong>
+      </button>
+      <button class="nav-pill-btn ai-btn" id="topNavAiBtn" title="Bật/Tắt khung Ghi chú & Trợ giảng AI">
+        <span>✦</span> Đặt câu hỏi với AI
+      </button>
+      <button class="nav-pill-btn">
+        <span>✋</span> Gửi yêu cầu
+      </button>
+
+      <div class="user-avatar" title="Đỗ Trường Thành An">Đ</div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-main">
+
+    <!-- 1. Left Sidebar: 2 mục theo yêu cầu -->
+    <aside class="left-sidebar">
+      <div class="left-header">
+        <span>CHỌN BÀI ĐỌC</span>
+        <span style="font-size:11px; color:#64748b;">2 bài học</span>
+      </div>
+
+      <div class="curriculum-menu-list">
+        <!-- Mục 1: Tư duy product (PDF) -->
+        <div class="menu-item-card active" id="menuItem1" title="Mở bài Tư duy product (PDF)">
+          <div class="item-header-row">
+            <div class="item-title-text">
+              <span>📄</span> 1. Tư duy product
+            </div>
+            <span class="badge-pill active" id="badgePdf">Đang học</span>
+          </div>
+          <div class="item-desc-text">
+            File tu-duy-product.pdf (27 slides)
+          </div>
+        </div>
+
+        <!-- Mục 2: MCP Multi Agent -->
+        <div class="menu-item-card" id="menuItem2" title="Mở bài MCP Multi Agent">
+          <div class="item-header-row">
+            <div class="item-title-text">
+              <span>📑</span> 2. MCP Multi Agent
+            </div>
+            <span class="badge-pill ready" id="badgeMcp">Tài liệu</span>
+          </div>
+          <div class="item-desc-text">
+            File mcp-multi-agent.md
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. Center Content Area -->
+    <section class="center-content">
+
+      <!-- VIEW 1: PDF Single-Slide Presentation Viewer (tu-duy-product.pdf) -->
+      <div id="viewPdf" style="display: flex; flex-direction: column; flex: 1;">
+        <!-- Top Control Bar -->
+        <div class="viewer-topbar">
+          <div class="viewer-file-info">
+            <div class="file-badge">
+              <span>📄</span> tu-duy-product.pdf
+            </div>
+            <a href="./tu-duy-product.pdf" download class="ctrl-btn" title="Tải file PDF gốc về máy">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Tải file .pdf
+            </a>
+          </div>
+
+          <div class="viewer-controls">
+            <button class="ctrl-btn" id="btnPrevSlide" title="Slide trước (←)">◀ Trước</button>
+            <select class="slide-select-box" id="slideSelect"></select>
+            <button class="ctrl-btn" id="btnNextSlide" title="Slide sau (→)">Sau ▶</button>
+          </div>
+        </div>
+
+        <!-- Module Navigation Filter Chips -->
+        <div class="module-nav-bar">
+          <span style="font-size:11px; font-weight:700; color:#64748b; margin-right:4px;">MODULE:</span>
+          <button class="module-tab-chip active" data-slide="1">Tổng quan (1-2)</button>
+          <button class="module-tab-chip" data-slide="3">M1: Câu hỏi của PM (3-7)</button>
+          <button class="module-tab-chip" data-slide="8">M2: Outcome > Output (8-18)</button>
+          <button class="module-tab-chip" data-slide="19">M3: Sơ đồ OST (19-23)</button>
+          <button class="module-tab-chip" data-slide="24">Case Heo Đất MoMo (24-26)</button>
+          <button class="module-tab-chip" data-slide="27">Tổng kết (27)</button>
+        </div>
+
+        <!-- Single Slide Stage (Chỉ mở 1 slide duy nhất, lật từ trái sang phải) -->
+        <div class="slide-single-stage">
+          <!-- Nút bấm chuyển slide trên màn hình -->
+          <button class="stage-nav-arrow prev" id="stagePrevBtn" title="Slide trước (Phím ←)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="stage-nav-arrow next" id="stageNextBtn" title="Slide sau (Phím →)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+
+          <!-- Frame chứa 1 slide duy nhất -->
+          <div class="slide-frame-card" id="slideFrameCard">
+            <img 
+              id="activeSlideImg" 
+              src="./assets/pdf_slides/slide_1.png" 
+              alt="Slide 1" 
+              class="slide-single-image"
+            />
+          </div>
+
+          
+          <!-- Slide Text Drawer for Text Selection & Highlighting -->
+          <div class="slide-text-accordion">
+            <div class="slide-text-toggle" id="slideTextToggleBtn">
+              <span>📝 <strong>Văn bản nội dung Slide</strong> (Bôi đen để highlight hoặc ghi chú)</span>
+              <button class="ctrl-btn" id="clearAllHighlightsSlideBtn" style="padding: 2px 8px; font-size: 11px; margin-left: 8px; color: #ef4444;" title="Hủy tất cả highlight trong slide này">🗑️ Hủy highlight slide</button>
+              <span id="slideTextNumBadge" style="margin-left:auto;margin-right:12px;font-size:11.5px;padding:2px 8px;background:#334155;border-radius:10px;color:#93c5fd;font-weight:600;">Slide 1</span>
+              <span id="slideTextToggleIcon">▼ Thu gọn</span>
+            </div>
+            <div class="slide-text-content" id="slideTextContentArea">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+
+          <!-- Footer của slide stage -->
+          <div class="slide-stage-footer">
+            <div class="slide-title-label">
+              <span style="color:#60a5fa;">●</span> <span id="currentSlideTitleDisplay">Slide 1: Tư duy Product cho người làm sản phẩm</span>
+            </div>
+            <div class="slide-nav-hint">
+              <span>Lật slide:</span>
+              <span class="kbd-chip">←</span>
+              <span class="kbd-chip">→</span>
+              <span id="slideCounterText" style="margin-left:4px; font-weight:600; color:#cbd5e1;">1 / 27</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thumbnail Strip at bottom -->
+        <div class="thumbnails-strip" id="thumbnailsStrip"></div>
+      </div>
+
+      <!-- VIEW 2: Full Document Viewer for mcp-multi-agent.md -->
+      <div id="viewMcpDoc" style="display: none; flex-direction: column; flex: 1;">
+        <!-- Doc Top Control Bar -->
+        <div class="viewer-topbar">
+          <div class="viewer-file-info">
+            <div class="file-badge">
+              <span>📑</span> mcp-multi-agent.md
+            </div>
+            <span style="font-size: 11.5px; color: #64748b;">Thời lượng đọc: ~5 phút · Toàn văn tài liệu</span>
+          </div>
+          <div class="viewer-controls">
+            <button class="ctrl-btn" id="clearAllHighlightsMcpBtn" title="Hủy tất cả highlight trong bài đọc này" style="color:#ef4444;">🗑️ Hủy tất cả highlight</button>
+            <a href="./mcp-multi-agent.md" download class="ctrl-btn" title="Tải file markdown gốc">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Tải file .md
+            </a>
+          </div>
+        </div>
+
+        <!-- Rendered Document Viewport -->
+        <div class="document-viewport">
+          <article class="markdown-doc-wrapper">
+<h1 class="doc-main-title">The Context Management Game: MCP & Multi-Agent Protocol & Orchestration</h1>
+<p class="doc-subtitle">Từ Harness Engineering đến một workflow thực tế.</p>
+<div class="doc-callout primary">
+              <span class="callout-badge">NGUYÊN TẮC CỐT LÕI</span>
+              <p style="margin-top:4px; font-weight:600; color:#1e3a8a;"> Right context. Right actor. Right time. (Đúng ngữ cảnh. Đúng tác nhân. Đúng thời điểm).</p>
+            </div>
+<hr class="doc-divider"/>
+<h2 class="doc-sec-title">1. Sự tiếp nối của Harness Engineering (The Continuation)</h2>
+<p class="doc-paragraph">Nếu Harness Engineering là quá trình thiết kế môi trường để agent làm việc hữu ích (bao gồm Instructions, Tools, Permissions, Validation), thì bước tiếp theo chính là <strong>Context Management</strong> (Quản lý ngữ cảnh).</p>
+<ul class="doc-unordered-list">
+<li><strong>Context Management:</strong> Quyết định xem agent nhìn thấy gì, khi nào và để làm gì. Nó xoay quanh các yếu tố: Truy cập (Access), Phạm vi (Scope), Cô lập (Isolation) và Bằng chứng (Evidence).</li>
+<li><em>Tóm lại:</em> Harness tạo ra môi trường, còn Context Management quyết định cách sử dụng môi trường đó.</li>
+</ul>
+<div class="doc-callout note">💡 <strong>Ghi chú:</strong> Nếu harness là môi trường làm việc, câu hỏi tiếp theo là agent lấy thông tin ở đâu, cần thấy bao nhiêu và bằng chứng (evidence) nào xác nhận kết quả.</div>
+<h2 class="doc-sec-title">2. Bài toán thực sự: "The Game"</h2>
+<p class="doc-paragraph">Sức mạnh không nằm ở việc nạp càng nhiều ngữ cảnh (context) càng tốt. Cửa sổ ngữ cảnh (context window) lớn không tự tạo ra quyết định tốt.</p>
+<p class="doc-paragraph">Mục tiêu là cung cấp <strong>đúng context, cho đúng tác nhân, vào đúng thời điểm</strong> thông qua 5 bước:</p>
+<ol class="doc-ordered-list">
+<li><strong>Acquire:</strong> Thu thập thông tin.</li>
+<li><strong>Scope:</strong> Xác định phạm vi tín hiệu (lọc nhiễu).</li>
+<li><strong>Isolate:</strong> Cô lập dữ liệu.</li>
+<li><strong>Act:</strong> Hành động.</li>
+<li><strong>Verify:</strong> Kiểm chứng nước đi.</li>
+</ol>
+<h2 class="doc-sec-title">3. Vấn đề của lập trình Web (The Web-Dev Problem)</h2>
+<p class="doc-paragraph">Ngữ cảnh của một ứng dụng web không nằm ở một chỗ mà phân tán khắp nơi: Code, GitHub, Docs, Figma, Browser, Database, Logs, Deploy, Auth...</p>
+<p class="doc-paragraph">Nếu không có sự kết nối giữa các hệ thống này, con người sẽ phải làm "integration layer" (lớp tích hợp) theo quy trình thủ công: <strong>Copy → Paste → Explain → Hope</strong> (Sao chép → Dán → Giải thích → Hy vọng kết quả đúng). Việc copy-paste này vừa làm chậm tiến độ, vừa làm mất đi các bằng chứng xác thực (evidence).</p>
+<h2 class="doc-sec-title">4. Giao thức truy cập: MCP (The Access Protocol)</h2>
+<p class="doc-paragraph"><strong>MCP (Model Context Protocol)</strong> giải quyết bài toán trên bằng cách mở ra quyền truy cập có cấu trúc:</p>
+<ul class="doc-unordered-list">
+<li><strong>Host:</strong> Codex hoặc AI application.</li>
+<li><strong>Client:</strong> Chịu trách nhiệm kết nối, xác thực (auth) và cấp quyền (consent).</li>
+<li><strong>Server:</strong> Cung cấp tài nguyên (resources), công cụ (tools) và hành động (actions).</li>
+</ul>
+<p class="doc-paragraph"><strong>MCP routes access:</strong> Nó chỉ điều hướng quyền truy cập, tạo ra một ranh giới I/O với nguồn dữ liệu gốc (source of truth) hiện tại. Nó không tự quyết định workflow (luồng công việc). Việc quyết định ai dùng tool nào với quyền gì thuộc về Orchestration.</p>
+<h2 class="doc-sec-title">5. Bối cảnh hiện tại (The Current Landscape)</h2>
+<p class="doc-paragraph">Hãy chọn sử dụng MCP theo nhu cầu thực tế, không phải chạy theo trào lưu (hype). Mỗi server được thêm vào sẽ kéo theo schema, permission và những rủi ro thất bại (failure surface) mới. <strong>Tuyệt đối không bật mọi công cụ cho mọi agent.</strong></p>
+<p class="doc-paragraph">Các nhóm công cụ MCP phổ biến:</p>
+<ul class="doc-unordered-list">
+<li><strong>Repository & delivery:</strong> GitHub</li>
+<li><strong>Current docs:</strong> Context7, tài liệu của vendor</li>
+<li><strong>Design & components:</strong> Figma, shadcn</li>
+<li><strong>Browser evidence:</strong> Playwright, Chrome DevTools</li>
+<li><strong>Data & runtime:</strong> Supabase, Neon, Sentry, Vercel</li>
+<li><strong>Product systems:</strong> Clerk, Stripe</li>
+</ul>
+<p class="doc-paragraph"><em>Mục tiêu của việc sử dụng MCP là:</em> Cải thiện ngữ cảnh · Giảm copy-paste · Khép kín vòng lặp kiểm chứng.</p>
+<h2 class="doc-sec-title">6. Định nghĩa thực sự về Agent (The Actors)</h2>
+<p class="doc-paragraph">Một Agent không chỉ là một AI Model có cái tên riêng. Cùng một model, nhưng sự khác biệt nằm ở trách nhiệm, ngữ cảnh, công cụ và quyền hạn.</p>
+<p class="doc-paragraph">Công thức của một Agent:</p>
+<div class="doc-callout note"><strong>Agent = Model + Instructions + Context + Tools + Authority + Feedback loop</strong></div>
+<div class="doc-callout note">💡 <strong>Ghi chú:</strong> Có công cụ (tool) hay câu lệnh (prompt) không thôi chưa tạo thành agent. Quyền hạn (Authority) và vòng lặp phản hồi (Feedback loop) mới quyết định agent có thể theo đuổi công việc đến đâu.</div>
+<h2 class="doc-sec-title">7. Sự cô lập ngữ cảnh (Context Isolation) & Sub-agents</h2>
+<p class="doc-paragraph">Nguyên tắc: <strong>Loại bỏ nhiễu (Noise đi ra) · Mang về bằng chứng (Evidence quay về).</strong></p>
+<p class="doc-paragraph">Để làm được điều này, hệ thống chia thành Agent chính và các Sub-agents hẹp, ví dụ:</p>
+<ul class="doc-unordered-list">
+<li><strong>Main agent</strong> (Quản lý chung)</li>
+<li class="nested-li"><em>Repository explorer</em> (Chuyên khám phá repo)</li>
+<li class="nested-li"><em>Implementation agent</em> (Chuyên thực thi)</li>
+<li class="nested-li"><em>Browser verifier</em> (Chuyên kiểm chứng trên trình duyệt)</li>
+<li class="nested-li"><em>Reviewer</em> (Chuyên đánh giá)</li>
+</ul>
+<p class="doc-paragraph"><strong>Context contract (Hợp đồng ngữ cảnh của Sub-agent):</strong></p>
+<p class="doc-paragraph">Sub-agent là một ngữ cảnh riêng với nhiệm vụ hẹp, làm việc song song chỉ tốt khi không bị chồng chéo. Mỗi Sub-agent cần được quy định rõ:</p>
+<ol class="doc-ordered-list">
+<li>Mục tiêu</li>
+<li>Context bắt đầu (Starting context)</li>
+<li>Các công cụ được phép dùng (Allowed tools)</li>
+<li>Phạm vi ghi/chỉnh sửa (Write scope)</li>
+<li>Luật phê duyệt (Approval rules)</li>
+<li>Đầu ra bắt buộc cần trả về (Output)</li>
+</ol>
+<h2 class="doc-sec-title">8. Mô hình tư duy tổng kết (One Mental Model)</h2>
+<p class="doc-paragraph">Để áp dụng thực tế, hãy ghi nhớ 5 trụ cột tư duy này:</p>
+<ol class="doc-ordered-list">
+<li><strong>Harness:</strong> Thiết kế môi trường.</li>
+<li><strong>MCP:</strong> Điều hướng truy cập (Route access).</li>
+<li><strong>Agents:</strong> Thực hiện công việc.</li>
+<li><strong>Sub-agents:</strong> Cô lập trách nhiệm.</li>
+<li><strong>Evidence:</strong> Tạo niềm tin bằng chứng thực.</li>
+</ol>
+<p class="doc-paragraph"><strong>Câu hỏi quan trọng nhất:</strong> <em>Agent này cần ngữ cảnh (context) gì để đưa ra nước đi đúng tiếp theo?</em></p>
+          </article>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 3. Right Sidebar: TÁCH ĐÔI 1:1 (Take Note 50% & Trợ giảng AI Chat 50%) -->
+    <aside class="right-sidebar" id="rightSidebar">
+
+      <!-- PHẦN 1: USER TAKE-NOTE (NỬA TRÊN 1:1) -->
+      <section class="note-panel" id="notePanel">
+        <div class="panel-header" id="rightSidebarHeader">
+          <div class="panel-title">
+            <span>📝</span> Ghi chú của bạn (Take-note)
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="counter-badge" id="noteCounterBadge">0/5 ý tích lũy</span>
+            <button class="close-sidebar-btn" id="closeSidebarBtn" title="Đóng bảng ghi chú & trợ giảng AI sang phải">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mini Toolbar -->
+        <div class="note-toolbar">
+          <button class="tool-btn" id="addBulletBtn" title="Thêm gạch đầu dòng">• Gạch đầu dòng</button>
+          <button class="tool-btn" id="addQuestionBtn" title="Đánh dấu câu hỏi thắc mắc">❓ Chưa hiểu (?)</button>
+          <button class="tool-btn" id="clearNoteBtn" style="margin-left:auto;">Xóa</button>
+        </div>
+
+        <!-- Note Text Editor (Default trống) -->
+        <div class="note-editor-wrapper">
+          <textarea class="note-textarea" id="noteInput" placeholder="Ghi chú nhanh các ý quan trọng từ slide PDF hoặc thắc mắc chưa hiểu (?)...&#10;Hệ thống tự động theo dõi và gợi ý tổng hợp khi đạt 5 ý."></textarea>
+        </div>
+
+        <!-- Conditional Proactive Nudge -->
+        <div class="proactive-nudge-box" id="nudgeBox" style="display: none;">
+          <div class="nudge-text">
+            <span>⚡</span> Đã tích lũy đủ 5 ý (ghi chú + highlight). Tổng hợp ngay?
+          </div>
+          <div class="nudge-actions">
+            <button class="nudge-btn confirm" id="btnSynthesizeNow">Tổng hợp ngay</button>
+            <button class="nudge-btn postpone" id="btnPostpone">Để cuối buổi</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHẦN 2: TRỢ GIẢNG AI CHAT (NỬA DƯỚI 1:1) -->
+      <section class="chat-panel" id="chatPanel">
+        <div class="panel-header">
+          <div class="panel-title" style="color: var(--accent-purple);">
+            <span>✦</span> Trợ giảng AI
+          </div>
+          <div class="chat-header-actions">
+            <button class="chat-action-btn" id="newChatBtn" title="Tạo cuộc hội thoại mới">+ Chat mới</button>
+            <button class="chat-action-btn" title="Lịch sử">🕒</button>
+            <button class="chat-action-btn" title="Chia đôi">◫</button>
+          </div>
+        </div>
+
+        <!-- Chat Stream Body -->
+        <div class="chat-messages-container" id="chatMessages">
+          <div class="empty-state-greeting" id="emptyGreeting">
+            <div class="empty-greeting-title" id="chatSlideTitleGreeting">Hỏi đáp về nội dung đang học</div>
+            <div class="empty-greeting-sub" id="chatSlideSubtitle">Đang xem: Slide 1 · tu-duy-product.pdf</div>
+
+            <div class="suggestion-chips" id="suggestionChipsContainer"></div>
+          </div>
+        </div>
+
+        <!-- Chat Input & Disclaimer -->
+        <div class="chat-input-area">
+          <form id="chatForm" class="input-wrapper">
+            <input 
+              type="text" 
+              class="chat-input-field" 
+              id="chatInputField" 
+              placeholder="Hỏi bất cứ điều gì về slide PDF này..."
+              autocomplete="off"
+            />
+            <button type="submit" class="chat-send-btn" id="sendBtn" title="Gửi câu hỏi">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <div class="disclaimer-text">
+            Trợ giảng AI bám sát 100% ngữ cảnh tu-duy-product.pdf & tài liệu hiện tại.<br>
+            Đừng gửi thông tin cá nhân nhạy cảm.
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- Floating Button mở lại cả 2 ô khi đã đóng sang phải -->
+    <button class="reopen-sidebar-tab" id="reopenSidebarBtn" title="Mở Ghi chú & Trợ giảng AI">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <div class="tab-label">
+        <span>Ghi chú & Trợ giảng AI</span>
+      </div>
+    </button>
+
+  </main>
+
+  <!-- Floating Highlight Toolbar (Matching Image) -->
+  <div id="highlightToast" class="hl-toast"></div>
+  <div id="highlightToolbar" class="highlight-floating-toolbar">
+    <!-- 1. Blue -->
+    <button class="hl-item-box" data-color="blue" title="Highlight xanh dương">
+      <span class="hl-color-pill blue"></span>
+    </button>
+    <!-- 2. Pink -->
+    <button class="hl-item-box" data-color="pink" title="Highlight hồng">
+      <span class="hl-color-pill pink"></span>
+    </button>
+    <!-- 3. Green -->
+    <button class="hl-item-box" data-color="green" title="Highlight xanh lá">
+      <span class="hl-color-pill green"></span>
+    </button>
+    <!-- 4. Yellow -->
+    <button class="hl-item-box" data-color="yellow" title="Highlight vàng">
+      <span class="hl-color-pill yellow"></span>
+    </button>
+    <!-- 5. Underline -->
+    <button class="hl-item-box" id="hlUnderlineBtn" title="Gạch chân (Underline)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+        <path d="M6 3v7a6 6 0 0 0 12 0V3"></path>
+        <line x1="4" y1="21" x2="20" y2="21"></line>
+      </svg>
+    </button>
+    <!-- 6. Strikethrough -->
+    <button class="hl-item-box" id="hlStrikeBtn" title="Gạch ngang (Strikethrough)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+        <path d="M16 4H9a3 3 0 0 0-2.83 4M14 12a4 4 0 0 1 0 8H6"></path>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+      </svg>
+    </button>
+    <!-- 7. Note / Comment -->
+    <button class="hl-item-box" id="hlCommentBtn" title="Trích dẫn vào ghi chú của bạn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        <line x1="8" y1="9" x2="16" y2="9"></line>
+        <line x1="8" y1="13" x2="13" y2="13"></line>
+      </svg>
+    </button>
+    <!-- 8. Trash / Delete -->
+    <button class="hl-item-box trash-btn" id="hlTrashBtn" title="Hủy highlight (Xóa màu đã tô, gạch chân)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+    </button>
+  </div>
+
+
+  <script>
+    // Data of 27 slides from tu-duy-product.pdf
+    const slidesData = [{"slide_num": 1, "title": "C H Ư Ơ N G T R Ì N H A I 2 0 K - V I N U N I", "clean_title": "CHƯƠNGTRÌNHAI20K-VINUNI", "content": ["C H Ư Ơ N G T R Ì N H A I 2 0 K - V I N U N I", "Tư duy Product", "cho người làm sản phẩm", "Tư duy nền tảng, thiết yếu, dành cho người làm công nghệ muốn tạo ra sản phẩm thành công.", "Hoàng Đức Minh Program Director @ Product Academy", "Founder @ 5balance.app"], "clean_content": ["C H Ư Ơ N G T R Ì N H A I 2 0 K - V I N U N I", "Tư duy Product", "cho người làm sản phẩm", "Tư duy nền tảng, thiết yếu, dành cho người làm công nghệ muốn tạo ra sản phẩm thành công.", "Hoàng Đức Minh Program Director @ Product Academy", "Founder @ 5balance.app"], "image_url": "./assets/pdf_slides/slide_1.png"}, {"slide_num": 2, "title": "G I Ớ I T H I ệ U G I Ả N G V I Ê N", "clean_title": "GIỚITHIệUGIẢNGVIÊN", "content": ["G I Ớ I T H I ệ U G I Ả N G V I Ê N", "Hoàng Đức Minh", "Program Director @Product Academy", "Founder @5Balance.app", "Hoạt động Hiện tại: Program Director tại Product Academy (Đào tạo & tư vấn Quản trị Sản phẩm và AI); Founder tại 5Balance.app (SaaS phân tích tâm lý & năng lượng cá nhân).", "Ghi nhận & Hành trình Cộng đồng: Được vinh danh trong Forbes 30 Under 30 Vietnam (Hoạt động Xã hội); Giải Nhất Forbes Startup Competition 2016.", "Kinh nghiệm làm việc và giảng dạy:", "Nguyên Trưởng bộ phận phụ trách Heo Đất MoMo & Ví Nhân Ái.", "Nguyên Program Director tại ThinkZone Accelerator, Head of L&D tại Five9 Vietnam.", "Tham gia tư vấn & đào tạo về phát triển sản phẩm cho MoMo, TAPTAP, Vietcombank, MSB, PVcomBank, OCB, SEABank, Viettel..."], "clean_content": ["G I Ớ I T H I ệ U G I Ả N G V I Ê N", "Hoàng Đức Minh", "Program Director @Product Academy", "Founder @5Balance.app", "Hoạt động Hiện tại: Program Director tại Product Academy (Đào tạo & tư vấn Quản trị Sản phẩm và AI); Founder tại 5Balance.app (SaaS phân tích tâm lý & năng lượng cá nhân).", "Ghi nhận & Hành trình Cộng đồng: Được vinh danh trong Forbes 30 Under 30 Vietnam (Hoạt động Xã hội); Giải Nhất Forbes Startup Competition 2016.", "Kinh nghiệm làm việc và giảng dạy:", "Nguyên Trưởng bộ phận phụ trách Heo Đất MoMo & Ví Nhân Ái.", "Nguyên Program Director tại ThinkZone Accelerator, Head of L&D tại Five9 Vietnam.", "Tham gia tư vấn & đào tạo về phát triển sản phẩm cho MoMo, TAPTAP, Vietcombank, MSB, PVcomBank, OCB, SEABank, Viettel..."], "image_url": "./assets/pdf_slides/slide_2.png"}, {"slide_num": 3, "title": "11", "clean_title": "11", "content": ["11", "M O D U L E 1", "Các câu hỏi chính mà 1 PM phải trả lời", "Khởi đầu đúng cách - Tránh đi vào những vết xe đổ khi xây dựng tính năng sản phẩm."], "clean_content": ["11", "M O D U L E 1", "Các câu hỏi chính mà 1 PM phải trả lời", "Khởi đầu đúng cách - Tránh đi vào những vết xe đổ khi xây dựng tính năng sản phẩm."], "image_url": "./assets/pdf_slides/slide_3.png"}, {"slide_num": 4, "title": "\"Tính năng mà tôi phải làm là gì?\"", "clean_title": "\"Tính năng mà tôi phải làm là gì?\"", "content": ["\"Tính năng mà tôi phải làm là gì?\"", "Câu hỏi ám ảnh mọi Product Manager khi bắt đầu dự án"], "clean_content": ["\"Tính năng mà tôi phải làm là gì?\"", "Câu hỏi ám ảnh mọi Product Manager khi bắt đầu dự án"], "image_url": "./assets/pdf_slides/slide_4.png"}, {"slide_num": 5, "title": "L Ờ I K H U Y Ê N", "clean_title": "LỜIKHUYÊN", "content": ["L Ờ I K H U Y Ê N", "Đừng vội nhảy vào giải pháp!", "Sai lầm phổ biến: Trực tiếp brainstorming đáp án (giải pháp) thay vì đi theo một chiến lược bài bản.", "Tính năng tốt = Tính năng bán được = Giải quyết đúng nỗi đau + Có người sẵn sàng trả tiền.", "Đó chính là CƠ HỘI!", "“"], "clean_content": ["L Ờ I K H U Y Ê N", "Đừng vội nhảy vào giải pháp!", "Sai lầm phổ biến: Trực tiếp brainstorming đáp án (giải pháp) thay vì đi theo một chiến lược bài bản.", "Tính năng tốt = Tính năng bán được = Giải quyết đúng nỗi đau + Có người sẵn sàng trả tiền.", "Đó chính là CƠ HỘI!", "“"], "image_url": "./assets/pdf_slides/slide_5.png"}, {"slide_num": 6, "title": "P R O B L E M F I R S T", "clean_title": "PROBLEMFIRST", "content": ["P R O B L E M F I R S T", "Customer Centric", "Để biết \"Nên theo đuổi c hội nào?\", đòi hỏi PM phải trả lời 2 câu hỏi lớn:", "01", "Tập trung vào ai?", "Ai là nhóm khách hàng mục tiêu có chung một nhu cầu chưa được đáp ứng?", "02", "Giải quyết vấn đề gì?", "Họ đang gặp nỗi đau gì và có sẵn sàng chi trả để thỏa mãn nhu cầu đó không?", "💡 Hãy YÊU VẤN ĐỀ chứ không YÊU GIẢI PHÁP!"], "clean_content": ["P R O B L E M F I R S T", "Customer Centric", "Để biết \"Nên theo đuổi c hội nào?\", đòi hỏi PM phải trả lời 2 câu hỏi lớn:", "01", "Tập trung vào ai?", "Ai là nhóm khách hàng mục tiêu có chung một nhu cầu chưa được đáp ứng?", "02", "Giải quyết vấn đề gì?", "Họ đang gặp nỗi đau gì và có sẵn sàng chi trả để thỏa mãn nhu cầu đó không?", "💡 Hãy YÊU VẤN ĐỀ chứ không YÊU GIẢI PHÁP!"], "image_url": "./assets/pdf_slides/slide_6.png"}, {"slide_num": 7, "title": "P H Â N T Í C H S Ả N P H Ẩ M", "clean_title": "PHÂNTÍCHSẢNPHẨM", "content": ["P H Â N T Í C H S Ả N P H Ẩ M", "Khung phân tích: Who - What - How", "1", "2", "3", "WHO", "Sản phẩm này nhắm tới ai?", "WHAT", "Giải quyết vấn đề gì của họ?", "HOW", "Bằng cách nào?"], "clean_content": ["P H Â N T Í C H S Ả N P H Ẩ M", "Khung phân tích: Who - What - How", "1", "2", "3", "WHO", "Sản phẩm này nhắm tới ai?", "WHAT", "Giải quyết vấn đề gì của họ?", "HOW", "Bằng cách nào?"], "image_url": "./assets/pdf_slides/slide_7.png"}, {"slide_num": 8, "title": "22", "clean_title": "22", "content": ["22", "M O D U L E 2", "Outcome over Output", "Dịch chuyển sự tập trung từ \"số lượng tính năng\" sang \"chỉ số tăng trưởng doanh nghiệp\"."], "clean_content": ["22", "M O D U L E 2", "Outcome over Output", "Dịch chuyển sự tập trung từ \"số lượng tính năng\" sang \"chỉ số tăng trưởng doanh nghiệp\"."], "image_url": "./assets/pdf_slides/slide_8.png"}, {"slide_num": 9, "title": "C Â U C H U Y ệ N T H Ự C T Ế", "clean_title": "CÂUCHUYệNTHỰCTẾ", "content": ["C Â U C H U Y ệ N T H Ự C T Ế", "Hàng triệu app hữu dụng... nhưng không ai trả tiền", "Rất nhiều sản phẩm giải quyết cực tốt vấn đề của người dùng, được hàng triệu người sử dụng mỗi ngày, nhưng lại gặp khó khăn trong việc kiếm tiền trực tiếp từ họ.", "Zalo", "Tiktok", "Google Maps", "Laban Key", "Cốc Cốc", "Wikipedia"], "clean_content": ["C Â U C H U Y ệ N T H Ự C T Ế", "Hàng triệu app hữu dụng... nhưng không ai trả tiền", "Rất nhiều sản phẩm giải quyết cực tốt vấn đề của người dùng, được hàng triệu người sử dụng mỗi ngày, nhưng lại gặp khó khăn trong việc kiếm tiền trực tiếp từ họ.", "Zalo", "Tiktok", "Google Maps", "Laban Key", "Cốc Cốc", "Wikipedia"], "image_url": "./assets/pdf_slides/slide_9.png"}, {"slide_num": 10, "title": "C U S T O M E R C E N T R I C V S O U T C O M E", "clean_title": "CUSTOMERCENTRICVSOUTCOME", "content": ["C U S T O M E R C E N T R I C V S O U T C O M E", "PM làm hài lòng Khách hàng chưa chắc đã là PM giỏi!", "Các PM làm hài lòng các khách hàng không có nghĩa là 1 PM giỏi. PM giỏi cũng không có nghĩa là PM làm ra các tính năng được dùng nhiều.", "“", "PM giỏi là PM giúp doanh nghiệp tăng trưởng một cách bền vững."], "clean_content": ["C U S T O M E R C E N T R I C V S O U T C O M E", "PM làm hài lòng Khách hàng chưa chắc đã là PM giỏi!", "Các PM làm hài lòng các khách hàng không có nghĩa là 1 PM giỏi. PM giỏi cũng không có nghĩa là PM làm ra các tính năng được dùng nhiều.", "“", "PM giỏi là PM giúp doanh nghiệp tăng trưởng một cách bền vững."], "image_url": "./assets/pdf_slides/slide_10.png"}, {"slide_num": 11, "title": "T Í N H N Ă N G C Ố T L Õ I", "clean_title": "TÍNHNĂNGCỐTLÕI", "content": ["T Í N H N Ă N G C Ố T L Õ I", "Các tính năng nào giúp DN phát triển bền vững?", "📈", "Tăng trưởng THẬT", "Đem lại doanh thu, lợi nhuận, tỷ lệ chuyển đổi, tỷ lệ giới thiệu, Active User.", "+", "❤", "Giá trị TỐT", "Vẫn đảm bảo giải quyết đúng nỗi đau và mang lại giá trị tốt cho khách hàng."], "clean_content": ["T Í N H N Ă N G C Ố T L Õ I", "Các tính năng nào giúp DN phát triển bền vững?", "📈", "Tăng trưởng THẬT", "Đem lại doanh thu, lợi nhuận, tỷ lệ chuyển đổi, tỷ lệ giới thiệu, Active User.", "+", "❤", "Giá trị TỐT", "Vẫn đảm bảo giải quyết đúng nỗi đau và mang lại giá trị tốt cho khách hàng."], "image_url": "./assets/pdf_slides/slide_11.png"}, {"slide_num": 12, "title": "C Ả N H B Á O", "clean_title": "CẢNHBÁO", "content": ["C Ả N H B Á O", "Customer Centric thuần túy có thể gây hại", "Nếu chúng ta chỉ tập trung vào khách hàng mà không tính đến lợi ích của doanh nghiệp.", "OUTCOME > OUTPUT", "Là tư duy đòi hỏi PM cần bắt đầu từ các chỉ số, các mục tiêu thực tế của doanh nghiệp."], "clean_content": ["C Ả N H B Á O", "Customer Centric thuần túy có thể gây hại", "Nếu chúng ta chỉ tập trung vào khách hàng mà không tính đến lợi ích của doanh nghiệp.", "OUTCOME > OUTPUT", "Là tư duy đòi hỏi PM cần bắt đầu từ các chỉ số, các mục tiêu thực tế của doanh nghiệp."], "image_url": "./assets/pdf_slides/slide_12.png"}, {"slide_num": 13, "title": "C Á C H T Ư D U Y", "clean_title": "CÁCHTƯDUY", "content": ["C Á C H T Ư D U Y", "Tư duy bắt đầu từ Chỉ số", "CÂU HỎI SỐ 1", "Tôi cần tập trung tăng trưởng chỉ số nào để giúp Doanh nghiệp phát triển?", "⬇", "DẪN ĐẾN CÂU HỎI KINH ĐIỂN", "Tôi nên theo đuổi c hội nào?"], "clean_content": ["C Á C H T Ư D U Y", "Tư duy bắt đầu từ Chỉ số", "CÂU HỎI SỐ 1", "Tôi cần tập trung tăng trưởng chỉ số nào để giúp Doanh nghiệp phát triển?", "⬇", "DẪN ĐẾN CÂU HỎI KINH ĐIỂN", "Tôi nên theo đuổi c hội nào?"], "image_url": "./assets/pdf_slides/slide_13.png"}, {"slide_num": 14, "title": "Đ Ị N H N G H Ĩ A C Ơ H Ộ I", "clean_title": "ĐỊNHNGHĨACƠHỘI", "content": ["Đ Ị N H N G H Ĩ A C Ơ H Ộ I", "Cơ hội & Hành vi Khách hàng", "\"Một nhóm khách hàng đủ tốt, với nhu cầu chưa được đáp ứng, và họ sẵn sàng chi trả để", "“", "thỏa mãn nhu cầu đó.\"", "Sự \"chi trả\" ở đây có thể không phải lúc nào cũng bằng tiền, mà có thể là công sức, thời gian.", "Bản chất của một tính năng tốt:", "Thúc đẩy khách hàng hành xử theo cách mà chúng ta muốn (bấm đăng ký, share...)", "➔", "Tác động thật lên Outcome (Mục tiêu doanh nghiệp)", "Chứ không chỉ là một sản phẩm được sử dụng nhiều hơn (Output)."], "clean_content": ["Đ Ị N H N G H Ĩ A C Ơ H Ộ I", "Cơ hội & Hành vi Khách hàng", "\"Một nhóm khách hàng đủ tốt, với nhu cầu chưa được đáp ứng, và họ sẵn sàng chi trả để", "“", "thỏa mãn nhu cầu đó.\"", "Sự \"chi trả\" ở đây có thể không phải lúc nào cũng bằng tiền, mà có thể là công sức, thời gian.", "Bản chất của một tính năng tốt:", "Thúc đẩy khách hàng hành xử theo cách mà chúng ta muốn (bấm đăng ký, share...)", "➔", "Tác động thật lên Outcome (Mục tiêu doanh nghiệp)", "Chứ không chỉ là một sản phẩm được sử dụng nhiều hơn (Output)."], "image_url": "./assets/pdf_slides/slide_14.png"}, {"slide_num": 15, "title": "OUTCOME", "clean_title": "OUTCOME", "content": ["OUTCOME", "> OUTPUT", "Tư duy Outcome over Output đòi hỏi chúng ta móc nối giữa \"Lợi ích của doanh nghiệp\" với \"Nỗi đau của người dùng\".", "💡  Giải quyết nỗi đau nào, của ai, thì Doanh nghiệp sẽ tăng trưởng đúng mục tiêu?"], "clean_content": ["OUTCOME", "> OUTPUT", "Tư duy Outcome over Output đòi hỏi chúng ta móc nối giữa \"Lợi ích của doanh nghiệp\" với \"Nỗi đau của người dùng\".", "💡  Giải quyết nỗi đau nào, của ai, thì Doanh nghiệp sẽ tăng trưởng đúng mục tiêu?"], "image_url": "./assets/pdf_slides/slide_15.png"}, {"slide_num": 16, "title": "3 L O Ạ I O U T C O M E", "clean_title": "3LOẠIOUTCOME", "content": ["3 L O Ạ I O U T C O M E", "Business Outcome (Mục tiêu doanh nghiệp)", "Các chỉ tiêu doanh nghiệp mong muốn đạt được để tăng trưởng kinh doanh.", "✅ Có khách hàng trả tiền", "✅ Tăng trưởng lợi nhuận / biên LN", "✅ Gia tăng thị phần", "✅ Giữ chân khách hàng", "✅ Tăng trưởng LTV, AOV", "✅ Tăng tỷ lệ chuyển đổi (Free → Paid)"], "clean_content": ["3 L O Ạ I O U T C O M E", "Business Outcome (Mục tiêu doanh nghiệp)", "Các chỉ tiêu doanh nghiệp mong muốn đạt được để tăng trưởng kinh doanh.", "✅ Có khách hàng trả tiền", "✅ Tăng trưởng lợi nhuận / biên LN", "✅ Gia tăng thị phần", "✅ Giữ chân khách hàng", "✅ Tăng trưởng LTV, AOV", "✅ Tăng tỷ lệ chuyển đổi (Free → Paid)"], "image_url": "./assets/pdf_slides/slide_16.png"}, {"slide_num": 17, "title": "3 L O Ạ I O U T C O M E", "clean_title": "3LOẠIOUTCOME", "content": ["3 L O Ạ I O U T C O M E", "Desired Outcome (Mục tiêu từ khách hàng)", "Những vấn đề / mong muốn mà Khách hàng kỳ vọng sản phẩm giải quyết.", "⚡", "Hiệu suất", "Hoàn thành công việc NHANH h n, RẺ h n hoặc được NHIỀU việc h n với cùng một nỗ lực.", "💡", "Đột phá & Trải nghiệm", "Làm việc TIệN h n, DỄ DÀNG h n hoặc làm được những điều trước đây chưa từng làm được."], "clean_content": ["3 L O Ạ I O U T C O M E", "Desired Outcome (Mục tiêu từ khách hàng)", "Những vấn đề / mong muốn mà Khách hàng kỳ vọng sản phẩm giải quyết.", "⚡", "Hiệu suất", "Hoàn thành công việc NHANH h n, RẺ h n hoặc được NHIỀU việc h n với cùng một nỗ lực.", "💡", "Đột phá & Trải nghiệm", "Làm việc TIệN h n, DỄ DÀNG h n hoặc làm được những điều trước đây chưa từng làm được."], "image_url": "./assets/pdf_slides/slide_17.png"}, {"slide_num": 18, "title": "3 L O Ạ I O U T C O M E", "clean_title": "3LOẠIOUTCOME", "content": ["3 L O Ạ I O U T C O M E", "Product Outcome (Cầu nối của PM)", "Desired Outcome + Business Outcome", "= Product Outcome", "Vai trò của PM là tìm ra các \"chỉ số sản phẩm\" để đẩy mạnh cả hai khía cạnh trên.", "Tỷ lệ user dùng tính năng", "Tỷ lệ hoàn thành (ko drop)", "Tần suất quay lại", "Thời lượng tương tác"], "clean_content": ["3 L O Ạ I O U T C O M E", "Product Outcome (Cầu nối của PM)", "Desired Outcome + Business Outcome", "= Product Outcome", "Vai trò của PM là tìm ra các \"chỉ số sản phẩm\" để đẩy mạnh cả hai khía cạnh trên.", "Tỷ lệ user dùng tính năng", "Tỷ lệ hoàn thành (ko drop)", "Tần suất quay lại", "Thời lượng tương tác"], "image_url": "./assets/pdf_slides/slide_18.png"}, {"slide_num": 19, "title": "33", "clean_title": "33", "content": ["33", "M O D U L E 3", "Hai công cụ sơ đồ hóa", "Cách hình ảnh hóa sự liên kết giữa Nỗi đau của người dùng và Mục tiêu của tổ chức."], "clean_content": ["33", "M O D U L E 3", "Hai công cụ sơ đồ hóa", "Cách hình ảnh hóa sự liên kết giữa Nỗi đau của người dùng và Mục tiêu của tổ chức."], "image_url": "./assets/pdf_slides/slide_19.png"}, {"slide_num": 20, "title": "C Ô N G C Ụ 1", "clean_title": "CÔNGCỤ1", "content": ["C Ô N G C Ụ 1", "Bản đồ Tác động (Impact Mapping)", "Tập trung vào cấp độ chiến lược. Làm rõ thứ tự ưu tiên:", "1 Goal: Mục tiêu kinh doanh là gì?", "2 Actors: Ai bị tác động / liên quan?", "3 Impacts: Tác động vào hành vi nào?", "4 Deliverables: Giải pháp là gì?"], "clean_content": ["C Ô N G C Ụ 1", "Bản đồ Tác động (Impact Mapping)", "Tập trung vào cấp độ chiến lược. Làm rõ thứ tự ưu tiên:", "1 Goal: Mục tiêu kinh doanh là gì?", "2 Actors: Ai bị tác động / liên quan?", "3 Impacts: Tác động vào hành vi nào?", "4 Deliverables: Giải pháp là gì?"], "image_url": "./assets/pdf_slides/slide_20.png"}, {"slide_num": 21, "title": "V Í D Ụ T H Ự C C H I Ế N", "clean_title": "VÍDỤTHỰCCHIẾN", "content": ["V Í D Ụ T H Ự C C H I Ế N", "Extended Impact Map"], "clean_content": ["V Í D Ụ T H Ự C C H I Ế N", "Extended Impact Map"], "image_url": "./assets/pdf_slides/slide_21.png"}, {"slide_num": 22, "title": "C Ô N G C Ụ 2", "clean_title": "CÔNGCỤ2", "content": ["C Ô N G C Ụ 2", "Cây Cơ hội - Giải pháp (OST)", "Đào sâu vào không gian giải pháp. OST kết nối Mục tiêu kinh doanh với Cơ hội từ phía Khách hàng.", "Desired Outcome (Mục tiêu)", "Opportunities (Cơ hội/Nỗi đau)", "Solutions (Giải pháp)", "Assumptions (Giả định)"], "clean_content": ["C Ô N G C Ụ 2", "Cây Cơ hội - Giải pháp (OST)", "Đào sâu vào không gian giải pháp. OST kết nối Mục tiêu kinh doanh với Cơ hội từ phía Khách hàng.", "Desired Outcome (Mục tiêu)", "Opportunities (Cơ hội/Nỗi đau)", "Solutions (Giải pháp)", "Assumptions (Giả định)"], "image_url": "./assets/pdf_slides/slide_22.png"}, {"slide_num": 23, "title": "V Í D Ụ T H Ự C C H I Ế N", "clean_title": "VÍDỤTHỰCCHIẾN", "content": ["V Í D Ụ T H Ự C C H I Ế N", "Cấu trúc 4 tầng của Cây cơ hội", "Tầng 1: OUTCOME (Kết quả)", "Tăng tỷ lệ user hoàn thành onboarding từ 40% lên 65% trong Q2", "Tầng 2: OPPORTUNITY (Vấn đề)", "User không thấy được value trong 5 phút đầu", "Tầng 3: SOLUTION (Giải pháp)", "Personalized welcome flow dùng AI để hỏi context user", "Tầng 4: EXPERIMENT (Thí nghiệm)", "Test welcome flow trên 10% user mới, đo time-to-ệrst-value", "1. OUTCOME", "Tăng 40% ➔ 65% Onboarding", "⬇", "2. OPPORTUNITY", "Không thấy value trong 5 phút", "⬇", "3. SOLUTION", "Welcome flow cá nhân hóa bằng AI", "⬇", "4. EXPERIMENT", "A/B Test 10% User mới"], "clean_content": ["V Í D Ụ T H Ự C C H I Ế N", "Cấu trúc 4 tầng của Cây cơ hội", "Tầng 1: OUTCOME (Kết quả)", "Tăng tỷ lệ user hoàn thành onboarding từ 40% lên 65% trong Q2", "Tầng 2: OPPORTUNITY (Vấn đề)", "User không thấy được value trong 5 phút đầu", "Tầng 3: SOLUTION (Giải pháp)", "Personalized welcome flow dùng AI để hỏi context user", "Tầng 4: EXPERIMENT (Thí nghiệm)", "Test welcome flow trên 10% user mới, đo time-to-ệrst-value", "1. OUTCOME", "Tăng 40% ➔ 65% Onboarding", "⬇", "2. OPPORTUNITY", "Không thấy value trong 5 phút", "⬇", "3. SOLUTION", "Welcome flow cá nhân hóa bằng AI", "⬇", "4. EXPERIMENT", "A/B Test 10% User mới"], "image_url": "./assets/pdf_slides/slide_23.png"}, {"slide_num": 24, "title": "M A S T E R C A S E S T U D Y", "clean_title": "MASTERCASESTUDY", "content": ["M A S T E R C A S E S T U D Y", "Ví dụ thực chiến: Heo Đất MoMo", "WHO (TẬP KHÁCH HÀNG)", "Khách hàng có sẵn của MoMo. Những người bình dân, không có nhiều tiền để làm từ thiện.", "WHAT / PAIN (NHU CẦU & NỖI ĐAU)", "User muốn làm việc thiện nhưng không có nhiều tiền, ngại quyên góp lẻ tẻ, và thích giải trí nhẹ nhàng, nuôi dưỡng cảm xúc.", "HOW (GIẢI PHÁP CỐT LÕI)", "Một chú Heo ảo, lớn lên khi user cho nó ăn bằng cách tương tác/giao dịch. Heo xuất chuồng sẽ được quyên góp thành tiền thật."], "clean_content": ["M A S T E R C A S E S T U D Y", "Ví dụ thực chiến: Heo Đất MoMo", "WHO (TẬP KHÁCH HÀNG)", "Khách hàng có sẵn của MoMo. Những người bình dân, không có nhiều tiền để làm từ thiện.", "WHAT / PAIN (NHU CẦU & NỖI ĐAU)", "User muốn làm việc thiện nhưng không có nhiều tiền, ngại quyên góp lẻ tẻ, và thích giải trí nhẹ nhàng, nuôi dưỡng cảm xúc.", "HOW (GIẢI PHÁP CỐT LÕI)", "Một chú Heo ảo, lớn lên khi user cho nó ăn bằng cách tương tác/giao dịch. Heo xuất chuồng sẽ được quyên góp thành tiền thật."], "image_url": "./assets/pdf_slides/slide_24.png"}, {"slide_num": 25, "title": "M A S T E R C A S E S T U D Y", "clean_title": "MASTERCASESTUDY", "content": ["M A S T E R C A S E S T U D Y", "Gắn kết 3 loại Outcome", "DESIRED OUTCOME", "(Từ phía khách hàng)", "Cảm thấy vui vẻ, thư giãn Cảm thấy tự hào, được khen ngợi khi làm việc thiện", "Làm điều tốt mà không thấy vất vả hay tốn kém", "BUSINESS OUTCOME", "(Từ phía MoMo)", "Tăng Monthly Active User (MAU)", "Tăng số lượng & số tiền quyên góp thực tế (CSR)", "Tăng số lượng giao dịch (khi user làm nhiệm vụ)", "PRODUCT OUTCOME", "(Chỉ số của Heo Đất)", "Tỷ lệ onboard thành công", "Tần suất đăng nhập mỗi tháng Retention Rate của Sản phẩm Số nhiệm vụ hoàn thành trung bình/tuần"], "clean_content": ["M A S T E R C A S E S T U D Y", "Gắn kết 3 loại Outcome", "DESIRED OUTCOME", "(Từ phía khách hàng)", "Cảm thấy vui vẻ, thư giãn Cảm thấy tự hào, được khen ngợi khi làm việc thiện", "Làm điều tốt mà không thấy vất vả hay tốn kém", "BUSINESS OUTCOME", "(Từ phía MoMo)", "Tăng Monthly Active User (MAU)", "Tăng số lượng & số tiền quyên góp thực tế (CSR)", "Tăng số lượng giao dịch (khi user làm nhiệm vụ)", "PRODUCT OUTCOME", "(Chỉ số của Heo Đất)", "Tỷ lệ onboard thành công", "Tần suất đăng nhập mỗi tháng Retention Rate của Sản phẩm Số nhiệm vụ hoàn thành trung bình/tuần"], "image_url": "./assets/pdf_slides/slide_25.png"}, {"slide_num": 26, "title": "M A S T E R C A S E S T U D Y", "clean_title": "MASTERCASESTUDY", "content": ["M A S T E R C A S E S T U D Y", "Sơ đồ OST minh họa", "PRODUCT OUTCOME (MỤC TIÊU)", "Tăng số ngày login mỗi tháng", "CƠ HỘI 1", "Phần thưởng hấp dẫn h n", "CƠ HỘI 2", "Heo dễ thư ng & sinh động h n", "CƠ HỘI 3", "Nhiệm vụ thú vị h n"], "clean_content": ["M A S T E R C A S E S T U D Y", "Sơ đồ OST minh họa", "PRODUCT OUTCOME (MỤC TIÊU)", "Tăng số ngày login mỗi tháng", "CƠ HỘI 1", "Phần thưởng hấp dẫn h n", "CƠ HỘI 2", "Heo dễ thư ng & sinh động h n", "CƠ HỘI 3", "Nhiệm vụ thú vị h n"], "image_url": "./assets/pdf_slides/slide_26.png"}, {"slide_num": 27, "title": "T Ổ N G K Ế T", "clean_title": "TỔNGKẾT", "content": ["T Ổ N G K Ế T", "Nhìn lại bức tranh tổng thể", "TƯ DUY 1", "Customer Centric", "Thấu hiểu sâu sắc nỗi đau và nhu cầu thực sự của khách hàng.", "TƯ DUY 2", "Outcome over Output", "Tập trung vào kết quả kinh doanh thay vì chỉ giao khối lượng tính năng.", "CÔNG CỤ 1", "Impact Mapping", "Bản đồ tác động giúp kết nối Mục tiêu kinh doanh với Hành vi người dùng.", "CÔNG CỤ 2", "Opportunity Solution Tree", "Cây cơ hội giúp hệ thống hóa quá trình khám phá không gian giải pháp (OST)."], "clean_content": ["T Ổ N G K Ế T", "Nhìn lại bức tranh tổng thể", "TƯ DUY 1", "Customer Centric", "Thấu hiểu sâu sắc nỗi đau và nhu cầu thực sự của khách hàng.", "TƯ DUY 2", "Outcome over Output", "Tập trung vào kết quả kinh doanh thay vì chỉ giao khối lượng tính năng.", "CÔNG CỤ 1", "Impact Mapping", "Bản đồ tác động giúp kết nối Mục tiêu kinh doanh với Hành vi người dùng.", "CÔNG CỤ 2", "Opportunity Solution Tree", "Cây cơ hội giúp hệ thống hóa quá trình khám phá không gian giải pháp (OST)."], "image_url": "./assets/pdf_slides/slide_27.png"}];
+
+    let currentSlideIndex = 0; // 0-based
+    let currentLesson = 'pdf'; // 'pdf' or 'mcp'
+
+    // DOM Elements - Left Menu & Views
+    const menuItem1 = document.getElementById('menuItem1');
+    const menuItem2 = document.getElementById('menuItem2');
+    const viewPdf = document.getElementById('viewPdf');
+    const viewMcpDoc = document.getElementById('viewMcpDoc');
+    const pageNavTitle = document.getElementById('pageNavTitle');
+    const progressText = document.getElementById('progressText');
+    const progressBarFill = document.getElementById('progressBarFill');
+
+    function switchLesson(lessonName) {
+      currentLesson = lessonName;
+      const m1 = document.getElementById('menuItem1');
+      const m2 = document.getElementById('menuItem2');
+      const vPdf = document.getElementById('viewPdf');
+      const vMcp = document.getElementById('viewMcpDoc');
+      const navTitle = document.getElementById('pageNavTitle');
+      const progTxt = document.getElementById('progressText');
+      const progBar = document.getElementById('progressBarFill');
+
+      if (lessonName === 'pdf') {
+        if (m1) m1.classList.add('active');
+        if (m2) m2.classList.remove('active');
+        if (vPdf) vPdf.style.display = 'flex';
+        if (vMcp) vMcp.style.display = 'none';
+        if (navTitle) navTitle.textContent = 'Khoá học AI Product · 1. Tư duy product (PDF Slide)';
+        if (progTxt) progTxt.textContent = '1/2 bài học';
+        if (progBar) progBar.style.width = '50%';
+        renderSlide(currentSlideIndex);
+      } else {
+        if (m1) m1.classList.remove('active');
+        if (m2) m2.classList.add('active');
+        if (vPdf) vPdf.style.display = 'none';
+        if (vMcp) vMcp.style.display = 'flex';
+        if (navTitle) navTitle.textContent = 'Khoá học AI Product · 2. MCP Multi Agent';
+        if (progTxt) progTxt.textContent = '2/2 bài học';
+        if (progBar) progBar.style.width = '100%';
+        updateAiContextForMcpDoc();
+      }
+    }
+
+    menuItem1.addEventListener('click', () => switchLesson('pdf'));
+    menuItem2.addEventListener('click', () => switchLesson('mcp'));
+
+    // DOM Elements - PDF Single-Slide Viewer
+    const slideSelect = document.getElementById('slideSelect');
+    const btnPrevSlide = document.getElementById('btnPrevSlide');
+    const btnNextSlide = document.getElementById('btnNextSlide');
+    const stagePrevBtn = document.getElementById('stagePrevBtn');
+    const stageNextBtn = document.getElementById('stageNextBtn');
+    const activeSlideImg = document.getElementById('activeSlideImg');
+    const currentSlideTitleDisplay = document.getElementById('currentSlideTitleDisplay');
+    const slideCounterText = document.getElementById('slideCounterText');
+    const thumbnailsStrip = document.getElementById('thumbnailsStrip');
+    const chatSlideTitleGreeting = document.getElementById('chatSlideTitleGreeting');
+    const chatSlideSubtitle = document.getElementById('chatSlideSubtitle');
+    const suggestionChipsContainer = document.getElementById('suggestionChipsContainer');
+
+    // Populate Slide Selector & Thumbnails
+    slidesData.forEach((slide, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `Slide ${slide.slide_num}: ${slide.clean_title}`;
+      slideSelect.appendChild(opt);
+
+      const thumb = document.createElement('div');
+      thumb.className = `thumb-card ${idx === 0 ? 'active' : ''}`;
+      thumb.id = `thumb-${idx}`;
+      thumb.innerHTML = `
+        <img src="${slide.image_url}" alt="Slide ${slide.slide_num}" class="thumb-img" loading="lazy" />
+        <span class="thumb-badge">#${slide.slide_num}</span>
+      `;
+      thumb.addEventListener('click', () => renderSlide(idx));
+      thumbnailsStrip.appendChild(thumb);
+    });
+
+    // Render single slide with transition
+    function renderSlide(index, direction = 'next') {
+      if (index < 0 || index >= slidesData.length) return;
+      currentSlideIndex = index;
+      const s = slidesData[index];
+
+      // Update selector & buttons
+      slideSelect.value = index;
+      btnPrevSlide.disabled = (index === 0);
+      btnNextSlide.disabled = (index === slidesData.length - 1);
+      stagePrevBtn.disabled = (index === 0);
+      stageNextBtn.disabled = (index === slidesData.length - 1);
+
+      // Update text indicators
+      slideCounterText.textContent = `${s.slide_num} / ${slidesData.length}`;
+      currentSlideTitleDisplay.textContent = `Slide ${s.slide_num}: ${s.clean_title}`;
+
+      // Smooth slide switch animation
+      activeSlideImg.style.opacity = '0';
+      activeSlideImg.style.transform = direction === 'next' ? 'translateX(16px)' : 'translateX(-16px)';
+      
+      setTimeout(() => {
+        activeSlideImg.src = s.image_url;
+        activeSlideImg.alt = `Slide ${s.slide_num} - ${s.clean_title}`;
+        activeSlideImg.onload = () => {
+          activeSlideImg.style.opacity = '1';
+          activeSlideImg.style.transform = 'translateX(0)';
+        };
+      }, 80);
+
+      // Update thumbnails active state
+      document.querySelectorAll('.thumb-card').forEach((th, i) => {
+        th.classList.toggle('active', i === index);
+      });
+      const activeThumb = document.getElementById(`thumb-${index}`);
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      if (currentLesson === 'pdf') {
+        updateAiContextForSlide(s);
+      }
+    }
+
+    // Module pills jump
+    document.querySelectorAll('.module-tab-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.module-tab-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const targetSlide = parseInt(chip.getAttribute('data-slide'), 10) - 1;
+        renderSlide(targetSlide, targetSlide > currentSlideIndex ? 'next' : 'prev');
+      });
+    });
+
+    slideSelect.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.value, 10);
+      renderSlide(idx, idx > currentSlideIndex ? 'next' : 'prev');
+    });
+
+    btnPrevSlide.addEventListener('click', () => renderSlide(currentSlideIndex - 1, 'prev'));
+    btnNextSlide.addEventListener('click', () => renderSlide(currentSlideIndex + 1, 'next'));
+    stagePrevBtn.addEventListener('click', () => renderSlide(currentSlideIndex - 1, 'prev'));
+    stageNextBtn.addEventListener('click', () => renderSlide(currentSlideIndex + 1, 'next'));
+
+    // Keyboard navigation (← và →)
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+      if (currentLesson === 'pdf') {
+        if (e.key === 'ArrowLeft') renderSlide(currentSlideIndex - 1, 'prev');
+        if (e.key === 'ArrowRight') renderSlide(currentSlideIndex + 1, 'next');
+      }
+    });
+
+    // Update AI Chat Context for Slide
+    function updateAiContextForSlide(s) {
+      if (chatSlideTitleGreeting) {
+        chatSlideTitleGreeting.textContent = `Hỏi đáp về Slide ${s.slide_num}`;
+      }
+      if (chatSlideSubtitle) {
+        chatSlideSubtitle.textContent = `Đang xem: ${s.clean_title} · tu-duy-product.pdf`;
+      }
+
+      let suggestions = [];
+      if (s.slide_num >= 8 && s.slide_num <= 18) {
+        suggestions = [
+          { text: '💡 Tóm tắt Outcome > Output', prompt: 'Hãy tóm tắt sự khác biệt giữa Outcome và Output ở slide PDF này' },
+          { text: '❓ 3 loại Outcome là gì?', prompt: 'Phân tích 3 loại Outcome: Business, Desired và Product Outcome trong slide' },
+          { text: '📈 Áp dụng vào case Zalo/TikTok', prompt: 'Tại sao rất nhiều app có hàng triệu user nhưng không kiếm được tiền?' }
+        ];
+      } else if (s.slide_num >= 19 && s.slide_num <= 23) {
+        suggestions = [
+          { text: '💡 Giải thích sơ đồ OST', prompt: 'Giải thích cấu trúc 4 tầng của Cây cơ hội - giải pháp (OST) trên slide' },
+          { text: '❓ Impact Mapping là gì?', prompt: 'Impact Mapping giúp PM giải quyết bài toán ưu tiên như thế nào?' }
+        ];
+      } else if (s.slide_num >= 24 && s.slide_num <= 26) {
+        suggestions = [
+          { text: '💡 Case Heo Đất MoMo', prompt: 'Phân tích case Heo Đất MoMo trên slide: Ai là tập khách hàng và giải quyết bài toán gì?' },
+          { text: '📈 Product Outcome của MoMo', prompt: 'Product Outcome cụ thể của Heo Đất MoMo là chỉ số nào?' }
+        ];
+      } else {
+        suggestions = [
+          { text: '💡 Tóm tắt ý chính slide này', prompt: `Tóm tắt các điểm quan trọng nhất của Slide ${s.slide_num}: ${s.clean_title}` },
+          { text: '❓ Đừng vội nhảy vào giải pháp', prompt: 'Tại sao PM không nên trực tiếp brainstorming giải pháp ngay từ đầu?' }
+        ];
+      }
+
+      renderChips(suggestions);
+    }
+
+    // Update AI Chat Context for MCP Document
+    function updateAiContextForMcpDoc() {
+      if (chatSlideTitleGreeting) {
+        chatSlideTitleGreeting.textContent = 'Hỏi đáp về MCP & Multi-Agent';
+      }
+      if (chatSlideSubtitle) {
+        chatSlideSubtitle.textContent = 'Đang đọc: mcp-multi-agent.md · The Context Management Game';
+      }
+
+      const suggestions = [
+        { text: '💡 5 bước của The Game', prompt: 'Giải thích 5 bước quản lý ngữ cảnh: Acquire, Scope, Isolate, Act, Verify trong The Game' },
+        { text: '🤖 Công thức của Agent', prompt: 'Phân tích công thức: Agent = Model + Instructions + Context + Tools + Authority + Feedback loop' },
+        { text: '⚙️ MCP routes access là gì?', prompt: 'Tại sao nói MCP chỉ điều hướng quyền truy cập (routes access) mà không tự quyết định workflow?' },
+        { text: '🛡️ Context Contract của Sub-agent', prompt: 'Context contract của Sub-agent gồm những quy định cụ thể nào?' }
+      ];
+
+      renderChips(suggestions);
+    }
+
+    function renderChips(suggestions) {
+      if (!suggestionChipsContainer) return;
+      suggestionChipsContainer.innerHTML = '';
+      suggestions.forEach(item => {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.textContent = item.text;
+        chip.addEventListener('click', () => {
+          chatInputField.value = item.prompt;
+          chatForm.dispatchEvent(new Event('submit'));
+        });
+        suggestionChipsContainer.appendChild(chip);
+      });
+    }
+
+    // Sidebar Toggle Logic
+    const rightSidebar = document.getElementById('rightSidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+    const reopenSidebarBtn = document.getElementById('reopenSidebarBtn');
+    const topNavAiBtn = document.getElementById('topNavAiBtn');
+
+    function closeSidebar() {
+      rightSidebar.classList.add('collapsed');
+      reopenSidebarBtn.classList.add('visible');
+    }
+
+    function openSidebar() {
+      rightSidebar.classList.remove('collapsed');
+      reopenSidebarBtn.classList.remove('visible');
+    }
+
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    reopenSidebarBtn.addEventListener('click', openSidebar);
+    topNavAiBtn.addEventListener('click', () => {
+      if (rightSidebar.classList.contains('collapsed')) {
+        openSidebar();
+      } else {
+        closeSidebar();
+      }
+    });
+
+    // Elements - Note & Trigger
+    const noteInput = document.getElementById('noteInput');
+    const noteCounterBadge = document.getElementById('noteCounterBadge');
+    const nudgeBox = document.getElementById('nudgeBox');
+    const btnSynthesizeNow = document.getElementById('btnSynthesizeNow');
+    const btnPostpone = document.getElementById('btnPostpone');
+    const addBulletBtn = document.getElementById('addBulletBtn');
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const clearNoteBtn = document.getElementById('clearNoteBtn');
+
+    // Elements - Chat
+    const chatForm = document.getElementById('chatForm');
+    const chatInputField = document.getElementById('chatInputField');
+    const sendBtn = document.getElementById('sendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    const emptyGreeting = document.getElementById('emptyGreeting');
+    const newChatBtn = document.getElementById('newChatBtn');
+
+    function updateCounter() {
+      const text = noteInput.value.trim();
+      if (!text) {
+        noteCounterBadge.textContent = '0/5 ý tích lũy';
+        noteCounterBadge.classList.remove('reached');
+        nudgeBox.style.display = 'none';
+        return;
+      }
+      const lines = text.split('\n').filter(l => l.trim().length > 0);
+      const count = lines.length;
+      noteCounterBadge.textContent = `${count}/5 ý tích lũy`;
+      
+      if (count >= 5) {
+        noteCounterBadge.classList.add('reached');
+        nudgeBox.style.display = 'block';
+      } else {
+        noteCounterBadge.classList.remove('reached');
+        nudgeBox.style.display = 'none';
+      }
+    }
+
+    noteInput.addEventListener('input', updateCounter);
+
+    addBulletBtn.addEventListener('click', () => {
+      const cur = noteInput.value;
+      noteInput.value = cur ? (cur.endsWith('\n') ? cur + '- ' : cur + '\n- ') : '- ';
+      noteInput.focus();
+      updateCounter();
+    });
+
+    addQuestionBtn.addEventListener('click', () => {
+      const cur = noteInput.value;
+      noteInput.value = cur ? (cur.endsWith('\n') ? cur + '- (?) Chưa hiểu: ' : cur + '\n- (?) Chưa hiểu: ') : '- (?) Chưa hiểu: ';
+      noteInput.focus();
+      updateCounter();
+    });
+
+    clearNoteBtn.addEventListener('click', () => {
+      if (noteInput.value.trim().length > 0) {
+        if (confirm('Bạn có chắc muốn xóa toàn bộ ghi chú này?')) {
+          noteInput.value = '';
+          updateCounter();
+        }
+      }
+    });
+
+    btnPostpone.addEventListener('click', () => {
+      nudgeBox.style.display = 'none';
+      const curTopic = currentLesson === 'pdf' ? 'Tư duy product (PDF)' : 'MCP Multi Agent';
+      appendMessage('assistant', `⏳ Đã lưu các ý ghi chú vào hàng đợi. Hệ thống sẽ lưu giữ toàn bộ dữ liệu từ bài '${curTopic}' để tổng hợp hoàn chỉnh khi kết thúc buổi học.`);
+    });
+
+    btnSynthesizeNow.addEventListener('click', () => {
+      nudgeBox.style.display = 'none';
+      appendSynthesisCard();
+    });
+
+    function appendSynthesisCard() {
+      if (emptyGreeting) emptyGreeting.style.display = 'none';
+      const card = document.createElement('div');
+      card.className = 'chat-bubble synthesis-card';
+      
+      if (currentLesson === 'mcp') {
+        card.innerHTML = `
+          <div class="synthesis-card-title">
+            <span>⚡</span> <strong>Tổng hợp tức thì: MCP & Context Management</strong>
+          </div>
+          <p style="margin-bottom: 6px;"><strong>Dựa trên ghi chú & bài đọc mcp-multi-agent.md:</strong></p>
+          <ul style="padding-left: 18px; margin-bottom: 6px;">
+            <li><strong>Nguyên tắc cốt lõi:</strong> Đúng ngữ cảnh, đúng tác nhân, đúng thời điểm (Right context, Right actor, Right time). Cửa sổ ngữ cảnh lớn không tự tạo ra quyết định đúng nếu thiếu kiểm chứng.</li>
+            <li><strong>MCP & Sub-agents:</strong> MCP mở ra cổng truy cập dữ liệu, còn Orchestration chia việc cho các Sub-agent có Context contract rõ ràng (Noise đi ra · Evidence quay về).</li>
+          </ul>
+          <div style="font-size: 11px; color: #15803d;">✓ Đã đối chiếu chính xác với tài liệu mcp-multi-agent.md.</div>
+        `;
+      } else {
+        const curSlide = slidesData[currentSlideIndex];
+        card.innerHTML = `
+          <div class="synthesis-card-title">
+            <span>⚡</span> <strong>Tổng hợp tức thì (In-context Checkpoint)</strong>
+          </div>
+          <p style="margin-bottom: 6px;"><strong>Dựa trên ghi chú của bạn & Slide ${curSlide.slide_num} (${curSlide.clean_title}):</strong></p>
+          <ul style="padding-left: 18px; margin-bottom: 6px;">
+            <li><strong>Khái niệm cốt lõi:</strong> Tư duy Product đòi hỏi bắt đầu từ Outcome (chỉ số kinh doanh và giải quyết nỗi đau của user) thay vì Output (số lượng tính năng).</li>
+            <li><strong>Giải đáp các điểm ghi nhận:</strong> Các tính năng tốt là tính năng tác động thật lên tăng trưởng bền vững, có người sẵn sàng trả tiền/thời gian.</li>
+          </ul>
+          <div style="font-size: 11px; color: #15803d;">✓ Đã đối chiếu chính xác với tài liệu slide tu-duy-product.pdf.</div>
+        `;
+      }
+      chatMessages.appendChild(card);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function appendMessage(sender, text, isHtml = false) {
+      if (emptyGreeting) emptyGreeting.style.display = 'none';
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble ${sender}`;
+      if (isHtml || sender === 'assistant') {
+        bubble.innerHTML = isHtml ? text : renderMarkdownToHtml(text);
+      } else {
+        bubble.textContent = text;
+      }
+      chatMessages.appendChild(bubble);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return bubble;
+    }
+
+    chatInputField.addEventListener('input', () => {
+      if (chatInputField.value.trim().length > 0) {
+        sendBtn.classList.add('active');
+      } else {
+        sendBtn.classList.remove('active');
+      }
+    });
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const query = chatInputField.value.trim();
+      if (!query) return;
+
+      // 1. Post user question
+      appendMessage('user', query);
+      chatInputField.value = '';
+      sendBtn.classList.remove('active');
+
+      // 2. Add loading bubble
+      const loadingBubbleId = 'chat-loading-' + Date.now();
+      const loadingBubble = document.createElement('div');
+      loadingBubble.id = loadingBubbleId;
+      loadingBubble.className = 'chat-bubble assistant';
+      loadingBubble.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="ai-pulse-dot" style="font-size:16px;">✦</span>
+          <span><strong>Gemini Flash</strong> đang đối chiếu bài học và soạn câu trả lời đầy đủ...</span>
+        </div>
+      `;
+      chatMessages.appendChild(loadingBubble);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // 3. Request Gemini AI (Uncapped 8192 tokens)
+      try {
+        const reply = await executeGeminiChat(query);
+        const existingLoading = document.getElementById(loadingBubbleId);
+        if (existingLoading) existingLoading.remove();
+
+        const responseBubble = document.createElement('div');
+        responseBubble.className = 'chat-bubble assistant';
+        responseBubble.innerHTML = `
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #e2e8f0; font-size:12px; color:#1d4ed8; font-weight:700;">
+            <span>✨</span> Gemini Flash · Trợ giảng AI
+          </div>
+          <div class="chat-response-body">
+            ${renderMarkdownToHtml(reply)}
+          </div>
+        `;
+        chatMessages.appendChild(responseBubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      } catch (err) {
+        const existingLoading = document.getElementById(loadingBubbleId);
+        if (existingLoading) existingLoading.remove();
+
+        const isKeyError = err.message && (err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('400'));
+        const fallbackReply = generateOfflineChatReply(query, currentLesson);
+
+        const errorBubble = document.createElement('div');
+        errorBubble.className = 'chat-bubble assistant';
+        errorBubble.innerHTML = `
+          <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:10px 12px; margin-bottom:10px;">
+            <div style="display:flex; align-items:center; gap:6px; color:#b91c1c; font-weight:700; font-size:12.5px; margin-bottom:4px;">
+              <span>⚠️</span> ${isKeyError ? 'API Key chưa chính xác (Cần Google AI Studio Key)' : 'Chưa kết nối được API Gemini trực tuyến'}
+            </div>
+            <p style="font-size:12px; color:#7f1d1d; line-height:1.45; margin-bottom:6px;">
+              ${isKeyError 
+                ? 'Key trong <code>.env</code> hiện tại không phải là Google Gemini API Key chuẩn (Google Gemini Key thường bắt đầu bằng <code>AIzaSy...</code> có 39 ký tự).' 
+                : err.message}
+            </p>
+            <div style="display:flex; gap:8px;">
+              <button class="chat-action-btn" onclick="document.getElementById('geminiKeyModal').classList.add('active');" style="background:#ffffff; color:#b91c1c; border-color:#fca5a5;">⚙️ Cập nhật API Key</button>
+              <a href="https://aistudio.google.com/" target="_blank" class="chat-action-btn" style="text-decoration:none; color:#1d4ed8;">Lấy key miễn phí ↗</a>
+            </div>
+          </div>
+          <div class="chat-response-body">
+            <div style="font-size:12px; color:#15803d; font-weight:700; margin-bottom:6px;">
+              💡 [Câu trả lời chi tiết từ tài liệu bài giảng]:
+            </div>
+            ${renderMarkdownToHtml(fallbackReply)}
+          </div>
+        `;
+        chatMessages.appendChild(errorBubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    });
+
+    newChatBtn.addEventListener('click', () => {
+      chatMessages.innerHTML = '';
+      if (emptyGreeting) {
+        chatMessages.appendChild(emptyGreeting);
+        emptyGreeting.style.display = 'block';
+      }
+    });
+
+    
+    
+    // ================= ROBUST HIGHLIGHT & NOTE PERSISTENCE =================
+    const highlightToolbar = document.getElementById('highlightToolbar');
+    const hlUnderlineBtn = document.getElementById('hlUnderlineBtn');
+    const hlStrikeBtn = document.getElementById('hlStrikeBtn');
+    const hlCommentBtn = document.getElementById('hlCommentBtn');
+    const hlTrashBtn = document.getElementById('hlTrashBtn');
+    const slideTextContentArea = document.getElementById('slideTextContentArea');
+    const slideTextNumBadge = document.getElementById('slideTextNumBadge');
+    const clearAllHighlightsMcpBtn = document.getElementById('clearAllHighlightsMcpBtn');
+    const clearAllHighlightsSlideBtn = document.getElementById('clearAllHighlightsSlideBtn');
+
+    let currentSelectedRange = null;
+    let totalHighlights = parseInt(localStorage.getItem('ai_learning_highlights_count') || '0', 10);
+
+    // Prevent toolbar clicks from losing document selection
+    highlightToolbar.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    // Helper: Toast notification for quick user feedback
+    function showHighlightToast(message) {
+      let toast = document.getElementById('highlightToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'highlightToast';
+        toast.className = 'hl-toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 1600);
+    }
+
+    // Helper: Unwrap an element while preserving all children
+    function unwrapMark(el) {
+      if (!el || !el.parentNode) return false;
+      const parent = el.parentNode;
+      while (el.firstChild) {
+        parent.insertBefore(el.firstChild, el);
+      }
+      parent.removeChild(el);
+      parent.normalize();
+      return true;
+    }
+
+    // Helper: Test if range intersects node
+    function nodeIntersectsRange(node, rng) {
+      try {
+        const nr = document.createRange();
+        nr.selectNode(node);
+        return rng.compareBoundaryPoints(Range.END_TO_START, nr) < 0 &&
+               rng.compareBoundaryPoints(Range.START_TO_END, nr) > 0;
+      } catch(e) {
+        return false;
+      }
+    }
+
+    // Function: Position floating toolbar above a bounding rect
+    function positionToolbarAt(rect) {
+      const toolbarWidth = 320;
+      let left = rect.left + (rect.width / 2) - (toolbarWidth / 2);
+      let top = rect.top - 46;
+
+      left = Math.max(10, Math.min(window.innerWidth - toolbarWidth - 10, left));
+      if (top < 10) {
+        top = rect.bottom + 8; // If selected near top edge, show below text
+      }
+
+      highlightToolbar.style.left = `${left}px`;
+      highlightToolbar.style.top = `${top}px`;
+      highlightToolbar.style.display = 'flex';
+    }
+
+    // Update slide text panel in Lesson 1 when slide changes
+    function updateSlideTextPanel(s) {
+      if (!slideTextContentArea || !s) return;
+      if (slideTextNumBadge) slideTextNumBadge.textContent = `Slide ${s.slide_num}`;
+      slideTextContentArea.innerHTML = s.clean_content.map(p => `<p>${p}</p>`).join('');
+    }
+
+    // Hook into renderSlide
+    const prevRenderSlide = renderSlide;
+    renderSlide = function(index, direction = 'next') {
+      prevRenderSlide(index, direction);
+      const s = slidesData[index];
+      updateSlideTextPanel(s);
+    };
+
+    // Show floating toolbar when user selects text
+    function checkAndShowHighlightToolbar() {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed) {
+        hideHighlightToolbar();
+        return;
+      }
+
+      const selectedText = sel.toString().trim();
+      if (!selectedText) {
+        hideHighlightToolbar();
+        return;
+      }
+
+      // Check if selection is within center content (Document or Slide Text)
+      const anchorNode = sel.anchorNode;
+      const centerArea = document.querySelector('.center-content');
+      if (!centerArea || !centerArea.contains(anchorNode)) {
+        hideHighlightToolbar();
+        return;
+      }
+
+      const range = sel.getRangeAt(0);
+      currentSelectedRange = range.cloneRange();
+      positionToolbarAt(range.getBoundingClientRect());
+    }
+
+    document.addEventListener('mouseup', () => {
+      setTimeout(checkAndShowHighlightToolbar, 10);
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Shift' || e.key.startsWith('Arrow')) {
+        setTimeout(checkAndShowHighlightToolbar, 10);
+      }
+    });
+
+    function hideHighlightToolbar() {
+      highlightToolbar.style.display = 'none';
+      currentSelectedRange = null;
+    }
+
+    // Hide toolbar when clicking outside of toolbar and selection
+    document.addEventListener('mousedown', (e) => {
+      if (!highlightToolbar.contains(e.target)) {
+        hideHighlightToolbar();
+      }
+    });
+
+    // Dismiss toolbar on scrolling center area
+    const centerContentArea = document.querySelector('.center-content');
+    if (centerContentArea) {
+      centerContentArea.addEventListener('scroll', () => {
+        hideHighlightToolbar();
+      });
+
+      // 1-Click on existing highlight to show toolbar for instant removal or color changing
+      centerContentArea.addEventListener('click', (e) => {
+        const mark = e.target.closest('mark, [class*="user-highlight"]');
+        if (mark) {
+          const sel = window.getSelection();
+          if (!sel || sel.isCollapsed) {
+            const range = document.createRange();
+            range.selectNodeContents(mark);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            currentSelectedRange = range.cloneRange();
+            positionToolbarAt(mark.getBoundingClientRect());
+          }
+        }
+      });
+    }
+
+    // Apply color highlight (or update color if clicking an existing mark)
+    function applyHighlightColor(colorName) {
+      if (!currentSelectedRange) return;
+
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(currentSelectedRange);
+
+      const colors = {
+        blue: '#bae6fd',
+        pink: '#fbcfe8',
+        green: '#bbf7d0',
+        yellow: '#fef08a'
+      };
+      const hex = colors[colorName] || '#fef08a';
+
+      // Check if range is inside or touches an existing mark
+      const container = currentSelectedRange.commonAncestorContainer;
+      const el = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+      const existingMark = el ? el.closest('mark, [class*="user-highlight"]') : null;
+
+      if (existingMark) {
+        existingMark.className = `user-highlight-${colorName}`;
+        existingMark.style.backgroundColor = hex;
+        hideHighlightToolbar();
+        showHighlightToast('✓ Đã đổi màu highlight');
+        return;
+      }
+
+      try {
+        const mark = document.createElement('mark');
+        mark.className = `user-highlight-${colorName}`;
+        mark.style.backgroundColor = hex;
+        currentSelectedRange.surroundContents(mark);
+      } catch (err) {
+        try {
+          const fragment = currentSelectedRange.extractContents();
+          const mark = document.createElement('mark');
+          mark.className = `user-highlight-${colorName}`;
+          mark.style.backgroundColor = hex;
+          mark.appendChild(fragment);
+          currentSelectedRange.insertNode(mark);
+        } catch (err2) {
+          document.execCommand('hiliteColor', false, hex);
+        }
+      }
+
+      totalHighlights++;
+      localStorage.setItem('ai_learning_highlights_count', totalHighlights);
+      updateCounter();
+      hideHighlightToolbar();
+      showHighlightToast('✓ Đã highlight nội dung');
+    }
+
+    document.querySelectorAll('.hl-item-box[data-color]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const color = btn.getAttribute('data-color');
+        applyHighlightColor(color);
+      });
+    });
+
+    // Apply Underline
+    hlUnderlineBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!currentSelectedRange) return;
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(currentSelectedRange);
+      document.execCommand('underline');
+      hideHighlightToolbar();
+      showHighlightToast('✓ Đã gạch chân');
+    });
+
+    // Apply Strikethrough
+    hlStrikeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!currentSelectedRange) return;
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(currentSelectedRange);
+      document.execCommand('strikeThrough');
+      hideHighlightToolbar();
+      showHighlightToast('✓ Đã gạch ngang');
+    });
+
+    // Comment/Note Button: Send highlighted quote to user Take-Note panel
+    hlCommentBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!currentSelectedRange) return;
+      const quoteText = currentSelectedRange.toString().trim();
+      if (quoteText) {
+        const sourceLabel = currentLesson === 'pdf' ? `Slide ${currentSlideIndex + 1}` : 'MCP Multi-Agent';
+        const formattedNote = `- [${sourceLabel}] "${quoteText}": `;
+        noteInput.value = (noteInput.value ? noteInput.value + '\n' : '') + formattedNote;
+        saveUserNotes();
+        noteInput.focus();
+        updateCounter();
+        showHighlightToast('✓ Đã trích dẫn vào ghi chú');
+      }
+      hideHighlightToolbar();
+    });
+
+    // CORE FEATURE: Remove / Cancel Highlight
+    function removeHighlight(range) {
+      if (!range) return false;
+      let removedCount = 0;
+
+      // 1. Direct parent/ancestor is a mark
+      const container = range.commonAncestorContainer;
+      const el = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+      const directMark = el ? el.closest('mark, [class*="user-highlight"]') : null;
+      if (directMark) {
+        if (unwrapMark(directMark)) removedCount++;
+      }
+
+      // 2. Marks inside or intersecting range
+      const centerArea = document.querySelector('.center-content');
+      if (centerArea) {
+        const marks = centerArea.querySelectorAll('mark, [class*="user-highlight"]');
+        marks.forEach(m => {
+          if (nodeIntersectsRange(m, range)) {
+            if (unwrapMark(m)) removedCount++;
+          }
+        });
+      }
+
+      // 3. Clear formatting like underline/strikethrough
+      try {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('removeFormat', false, null);
+      } catch(e) {}
+
+      if (removedCount > 0) {
+        totalHighlights = Math.max(0, totalHighlights - removedCount);
+        localStorage.setItem('ai_learning_highlights_count', totalHighlights);
+        updateCounter();
+        showHighlightToast('🗑️ Đã hủy highlight');
+      } else {
+        showHighlightToast('Đã xóa định dạng');
+      }
+      return removedCount > 0;
+    }
+
+    // Trash Button: Remove highlight formatting
+    hlTrashBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!currentSelectedRange) return;
+      removeHighlight(currentSelectedRange);
+      hideHighlightToolbar();
+      const sel = window.getSelection();
+      if (sel) sel.removeAllRanges();
+    });
+
+    // Clear All Highlights in container
+    function clearAllHighlightsInContainer(container, label) {
+      if (!container) return;
+      const marks = container.querySelectorAll('mark, [class*="user-highlight"]');
+      if (marks.length === 0) {
+        showHighlightToast(`Không có highlight nào trong ${label}`);
+        return;
+      }
+      if (!confirm(`Bạn có chắc muốn hủy tất cả (${marks.length}) đoạn highlight trong ${label} không?`)) {
+        return;
+      }
+      marks.forEach(m => unwrapMark(m));
+      totalHighlights = Math.max(0, totalHighlights - marks.length);
+      localStorage.setItem('ai_learning_highlights_count', totalHighlights);
+      updateCounter();
+      showHighlightToast(`✓ Đã hủy tất cả highlight trong ${label}`);
+    }
+
+    if (clearAllHighlightsMcpBtn) {
+      clearAllHighlightsMcpBtn.addEventListener('click', () => {
+        const mcpDoc = document.getElementById('viewMcpDoc');
+        clearAllHighlightsInContainer(mcpDoc, 'bài đọc MCP');
+      });
+    }
+
+    if (clearAllHighlightsSlideBtn) {
+      clearAllHighlightsSlideBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearAllHighlightsInContainer(slideTextContentArea, 'slide này');
+      });
+    }
+
+    // ================= NOTE PERSISTENCE (LocalStorage) =================
+    function saveUserNotes() {
+      localStorage.setItem('ai_learning_user_note', noteInput.value);
+    }
+
+    function loadUserNotes() {
+      const savedNote = localStorage.getItem('ai_learning_user_note');
+      if (savedNote !== null) {
+        noteInput.value = savedNote;
+      }
+    }
+
+    // Auto-save on every keystroke
+    noteInput.addEventListener('input', () => {
+      saveUserNotes();
+      updateCounter();
+    });
+
+    // Override updateCounter to accurately calculate (Take-notes + Highlights)
+    updateCounter = function() {
+      const text = noteInput.value.trim();
+      const lines = text ? text.split('\n').filter(l => l.trim().length > 0) : [];
+      const totalItems = lines.length + totalHighlights;
+      
+      noteCounterBadge.textContent = `${totalItems}/5 ý tích lũy`;
+      if (totalItems >= 5) {
+        noteCounterBadge.classList.add('reached');
+        nudgeBox.style.display = 'block';
+      } else {
+        noteCounterBadge.classList.remove('reached');
+        nudgeBox.style.display = 'none';
+      }
+    };
+
+    // Load saved notes and initial text panel
+    loadUserNotes();
+    updateCounter();
+    if (slidesData && slidesData.length > 0) {
+      updateSlideTextPanel(slidesData[0]);
+    }
+
+    // Initial render: Mở Slide 1 từ trái sang phải
+    renderSlide(0, 'next');
+    updateCounter();
+  
+    // ================= GEMINI FLASH AI SYNTHESIS & NAVIGATION INTERCEPTOR =================
+    // DOM Elements - Modals
+    const synthesizeConfirmModal = document.getElementById('synthesizeConfirmModal');
+    const synthesizeResultModal = document.getElementById('synthesizeResultModal');
+    const geminiKeyModal = document.getElementById('geminiKeyModal');
+    const btnCloseConfirmModal = document.getElementById('btnCloseConfirmModal');
+    const btnSkipSynthesize = document.getElementById('btnSkipSynthesize');
+    const btnConfirmSynthesize = document.getElementById('btnConfirmSynthesize');
+    const btnCloseResultModal = document.getElementById('btnCloseResultModal');
+    const synthesisLoadingView = document.getElementById('synthesisLoadingView');
+    const synthesisResultContent = document.getElementById('synthesisResultContent');
+    const synthesisResultFooter = document.getElementById('synthesisResultFooter');
+    const btnAppendToNotes = document.getElementById('btnAppendToNotes');
+    const btnSendToChat = document.getElementById('btnSendToChat');
+    const btnProceedNavigation = document.getElementById('btnProceedNavigation');
+    const btnGeminiSettings = document.getElementById('btnGeminiSettings');
+    const btnCloseKeyModal = document.getElementById('btnCloseKeyModal');
+    const btnSaveKey = document.getElementById('btnSaveKey');
+    const btnClearKey = document.getElementById('btnClearKey');
+    const inputClientApiKey = document.getElementById('inputClientApiKey');
+    const modalTagNotes = document.getElementById('modalTagNotes');
+    const modalTagHl = document.getElementById('modalTagHl');
+    const modalTagSource = document.getElementById('modalTagSource');
+
+    let pendingNavigationAction = null;
+    let latestSynthesisResult = '';
+
+    // Markdown Parser for AI Synthesis results
+    function renderMarkdownToHtml(md) {
+      if (!md) return '';
+      let text = md
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Headings
+      text = text.replace(/^### (.*$)/gim, '<h4 style="margin:16px 0 6px 0; color:#1e293b; font-size:15px; font-weight:700;">$1</h4>');
+      text = text.replace(/^## (.*$)/gim, '<h3 style="margin:20px 0 8px 0; color:#0f172a; font-size:16.5px; font-weight:700; border-bottom:1px solid #e2e8f0; padding-bottom:5px;">$1</h3>');
+      text = text.replace(/^# (.*$)/gim, '<h2 style="margin:22px 0 10px 0; color:#0f172a; font-size:18px; font-weight:800;">$1</h2>');
+
+      // Bold & Italic
+      text = text.replace(/\*\*\*(.*?)\*\*\*/gim, '<strong><em>$1</em></strong>');
+      text = text.replace(/\*\*(.*?)\*\*/gim, '<strong style="color:#0f172a;">$1</strong>');
+      text = text.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+
+      // Inline code
+      text = text.replace(/`([^`]+)`/gim, '<code style="background:#f1f5f9; color:#0284c7; padding:2px 6px; border-radius:4px; font-size:12.5px;">$1</code>');
+
+      // Bullet lists
+      const lines = text.split('\n');
+      let inList = false;
+      let output = [];
+
+      for (let line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+          if (!inList) {
+            output.push('<ul style="margin:8px 0 12px 20px; padding-left:0; line-height:1.7;">');
+            inList = true;
+          }
+          output.push(`<li style="margin-bottom:6px; color:#334155;">${trimmed.substring(2)}</li>`);
+        } else {
+          if (inList) {
+            output.push('</ul>');
+            inList = false;
+          }
+          if (trimmed.length > 0) {
+            if (!trimmed.startsWith('<h') && !trimmed.startsWith('</h')) {
+              output.push(`<p style="margin:8px 0; line-height:1.65; color:#334155;">${trimmed}</p>`);
+            } else {
+              output.push(trimmed);
+            }
+          }
+        }
+      }
+      if (inList) output.push('</ul>');
+
+      return output.join('\n');
+    }
+
+    // Helper: Collect current highlights
+    function getActiveHighlights() {
+      const list = [];
+      const centerArea = document.querySelector('.center-content');
+      if (centerArea) {
+        const marks = centerArea.querySelectorAll('mark, [class*="user-highlight"]');
+        marks.forEach(m => {
+          const t = m.textContent.trim();
+          if (t && !list.includes(t)) list.push(t);
+        });
+      }
+      return list;
+    }
+
+    // Navigation Interceptor
+    function interceptNavigation(targetDesc, proceedFn) {
+      const userNotes = noteInput.value.trim();
+      const currentHighlights = getActiveHighlights();
+      const noteCount = userNotes ? userNotes.split('\n').filter(l => l.trim().length > 0).length : 0;
+      const hlCount = currentHighlights.length;
+
+      // If user has notes or highlights in current session: Prompt to synthesize!
+      if (noteCount > 0 || hlCount > 0) {
+        pendingNavigationAction = proceedFn;
+
+        if (modalTagNotes) modalTagNotes.innerHTML = `📝 <strong>${noteCount}</strong> ý ghi chú`;
+        if (modalTagHl) modalTagHl.innerHTML = `🖍️ <strong>${hlCount}</strong> đoạn highlight`;
+        if (modalTagSource) {
+          const sourceName = currentLesson === 'pdf' ? `Slide ${currentSlideIndex + 1} (PDF)` : 'MCP Multi-Agent';
+          modalTagSource.innerHTML = `📑 Đang học: ${sourceName} ➔ ${targetDesc}`;
+        }
+
+        synthesizeConfirmModal.classList.add('active');
+      } else {
+        // No notes or highlights: Proceed immediately
+        proceedFn();
+      }
+    }
+
+    // Close Confirmation Modal & Proceed to target
+    if (btnCloseConfirmModal) {
+      btnCloseConfirmModal.onclick = () => {
+        synthesizeConfirmModal.classList.remove('active');
+        if (pendingNavigationAction) {
+          const fn = pendingNavigationAction;
+          pendingNavigationAction = null;
+          fn();
+        }
+      };
+    }
+
+    // User chooses "Không, chuyển tiếp" -> Proceed immediately
+    if (btnSkipSynthesize) {
+      btnSkipSynthesize.onclick = () => {
+        synthesizeConfirmModal.classList.remove('active');
+        if (pendingNavigationAction) {
+          const fn = pendingNavigationAction;
+          pendingNavigationAction = null;
+          fn();
+        }
+      };
+    }
+
+    
+    // Function: Execute Gemini Synthesis via Local Server or Direct Google API
+    async function executeGeminiSynthesis() {
+      const userNotes = noteInput.value.trim();
+      const currentHighlights = typeof getActiveHighlights === 'function' ? getActiveHighlights() : [];
+
+      // Gather full document text
+      let fullText = '';
+      if (currentLesson === 'pdf') {
+        fullText = slidesData.map(s => `=== Slide ${s.slide_num}: ${s.clean_title} ===\n${s.clean_content.join('\n')}`).join('\n\n');
+      } else {
+        const mcpDocElement = document.querySelector('.markdown-reader-body');
+        fullText = mcpDocElement ? mcpDocElement.innerText : '';
+      }
+
+      // Read API Key from: (1) LocalStorage, (2) window.__ENV (from .env via env.js)
+      let activeKey = localStorage.getItem('gemini_api_key') || '';
+      if (!activeKey && typeof window.__ENV === 'object' && window.__ENV && window.__ENV.GEMINI_API_KEY) {
+        activeKey = window.__ENV.GEMINI_API_KEY;
+      }
+
+      let activeModel = 'gemini-3.5-flash-lite';
+      if (typeof window.__ENV === 'object' && window.__ENV && window.__ENV.GEMINI_MODEL) {
+        activeModel = window.__ENV.GEMINI_MODEL.trim();
+      }
+
+      const payload = {
+        lesson: currentLesson,
+        fullText: fullText,
+        notes: userNotes,
+        highlights: currentHighlights,
+        apiKey: activeKey,
+        model: activeModel
+      };
+
+      // 1. Try local server first if available
+      const isFileProto = window.location.protocol === 'file:';
+      const endpoints = isFileProto ? ['http://localhost:8000/api/synthesize'] : ['/api/synthesize', 'http://localhost:8000/api/synthesize'];
+
+      for (let endpoint of endpoints) {
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            return data.synthesis || data.reply;
+          } else if (data && data.error && !data.error.includes('Failed to fetch')) {
+            throw new Error(data.error);
+          }
+        } catch (e) {
+          if (e.message && e.message.includes('API key not valid')) {
+            throw e;
+          }
+        }
+      }
+
+      // 2. Direct Gemini API call if activeKey is present
+      if (activeKey && activeKey !== 'your_gemini_api_key_here') {
+        return await callDirectGeminiApi(payload, activeKey, activeModel, 'synthesize');
+      }
+
+      throw new Error('Chưa cấu hình GEMINI_API_KEY trong file .env. Vui lòng thêm API Key của bạn vào file .env hoặc bấm nút "Gemini Flash" ở góc trên.');
+    }
+
+    // Function: Execute Gemini Chat via Local Server or Direct Google API
+    async function executeGeminiChat(query) {
+      const userNotes = noteInput.value.trim();
+      const currentHighlights = typeof getActiveHighlights === 'function' ? getActiveHighlights() : [];
+
+      let fullText = '';
+      if (currentLesson === 'pdf') {
+        const curSlide = slidesData[currentSlideIndex];
+        fullText = `=== HIỆN TẠI ĐANG XEM: Slide ${curSlide.slide_num}: ${curSlide.clean_title} ===\n${curSlide.clean_content.join('\n')}\n\n=== TOÀN BỘ BÀI GIẢNG PDF TU-DUY-PRODUCT.PDF ===\n` +
+          slidesData.map(s => `[Slide ${s.slide_num}: ${s.clean_title}]\n${s.clean_content.join('\n')}`).join('\n\n');
+      } else {
+        const mcpDocElement = document.querySelector('.markdown-reader-body');
+        fullText = mcpDocElement ? mcpDocElement.innerText : '';
+      }
+
+      let activeKey = localStorage.getItem('gemini_api_key') || '';
+      if (!activeKey && typeof window.__ENV === 'object' && window.__ENV && window.__ENV.GEMINI_API_KEY) {
+        activeKey = window.__ENV.GEMINI_API_KEY;
+      }
+
+      let activeModel = 'gemini-3.5-flash-lite';
+      if (typeof window.__ENV === 'object' && window.__ENV && window.__ENV.GEMINI_MODEL) {
+        activeModel = window.__ENV.GEMINI_MODEL.trim();
+      }
+
+      const payload = {
+        lesson: currentLesson,
+        fullText: fullText,
+        notes: userNotes,
+        highlights: currentHighlights,
+        query: query,
+        apiKey: activeKey,
+        model: activeModel
+      };
+
+      // 1. Try local server endpoint POST /api/chat
+      const isFileProto = window.location.protocol === 'file:';
+      const endpoints = isFileProto ? ['http://localhost:8000/api/chat'] : ['/api/chat', 'http://localhost:8000/api/chat'];
+
+      for (let endpoint of endpoints) {
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            return data.reply || data.synthesis;
+          } else if (data && data.error && !data.error.includes('Failed to fetch')) {
+            throw new Error(data.error);
+          }
+        } catch (e) {
+          if (e.message && e.message.includes('API key not valid')) {
+            throw e;
+          }
+        }
+      }
+
+      // 2. Direct Gemini API call if activeKey is present
+      if (activeKey && activeKey !== 'your_gemini_api_key_here') {
+        return await callDirectGeminiApi(payload, activeKey, activeModel, 'chat');
+      }
+
+      throw new Error('Chưa cấu hình GEMINI_API_KEY trong file .env hoặc API key chưa hợp lệ. Vui lòng thêm Google Gemini API Key vào file .env hoặc bấm nút "Gemini Flash".');
+    }
+
+    // Direct Google Generative Language API call (NO LENGTH LIMIT: maxOutputTokens 8192)
+    async function callDirectGeminiApi(payload, apiKey, initialModel = 'gemini-3.5-flash-lite', mode = 'synthesize') {
+      // 1. Discover available models for this specific API key via ListModels
+      let discoveredModels = [];
+      try {
+        const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+        const listRes = await fetch(listUrl);
+        if (listRes.ok) {
+          const listData = await listRes.json();
+          if (listData && Array.isArray(listData.models)) {
+            discoveredModels = listData.models
+              .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+              .map(m => m.name.replace(/^models\//, ''));
+          }
+        }
+      } catch (e) {}
+
+      const defaultCandidateModels = [
+        initialModel,
+        'gemini-3.5-flash-lite',
+        'gemini-3.5-flash',
+        'gemini-3.8-flash',
+        'gemini-2.5-flash',
+        'gemini-2.0-flash'
+      ];
+
+      let candidateList = [];
+      if (discoveredModels.length > 0) {
+        if (discoveredModels.includes(initialModel)) candidateList.push(initialModel);
+        discoveredModels.filter(m => m.includes('flash')).forEach(m => {
+          if (!candidateList.includes(m)) candidateList.push(m);
+        });
+        discoveredModels.forEach(m => {
+          if (!candidateList.includes(m)) candidateList.push(m);
+        });
+      } else {
+        candidateList = defaultCandidateModels;
+      }
+      
+      const uniqueModels = [...new Set(candidateList)].filter(Boolean);
+      
+      const lessonTitle = payload.lesson === 'pdf' ? '1. Tư duy product (PDF Slide)' : '2. MCP Multi Agent (Markdown)';
+      let userMsg = '';
+      let sysPrompt = '';
+
+      if (mode === 'chat') {
+        userMsg = `TÀI LIỆU BÀI HỌC (${lessonTitle}):\n"""\n${payload.fullText}\n"""\n\nTHÔNG TIN HỌC TẬP CỦA NGƯỜI DÙNG:\n- Ghi chú: ${payload.notes || '(Không có)'}\n- Highlight: ${payload.highlights && payload.highlights.length ? payload.highlights.join(', ') : '(Không có)'}\n\nCÂU HỎI CỦA NGƯỜI HỌC:\n"${payload.query}"\n\nYÊU CẦU: Dựa vào tài liệu bài học, hãy giải thích cặn kẽ, đầy đủ, chi tiết và toàn diện nhất cho người học. Trả lời trọn vẹn toàn bộ nội dung, TUYỆT ĐỐI KHÔNG CẮT NGẮN, không giới hạn độ dài câu trả lời, trình bày bằng tiếng Việt với định dạng Markdown rõ ràng.`;
+
+        sysPrompt = `Bạn là trợ lý học tập AI chuyên sâu, thông thái và tận tâm cho khoá học AI Product.
+Người học đang đặt câu hỏi về bài giảng hoặc muốn đào sâu một vấn đề.
+Nhiệm vụ của bạn:
+- Dựa vào tài liệu bài học được cung cấp (toàn văn PDF Slide hoặc Markdown), hãy giải đáp câu hỏi của người học một cách ĐẦY ĐỦ, TOÀN DIỆN, CHI TIẾT và SÂU SẮC nhất.
+- Nêu rõ nguyên lý cốt lõi, bối cảnh bài giảng, các bước áp dụng và ví dụ thực tế liên hệ từ bài giảng.
+- TUYỆT ĐỐI KHÔNG CẮT NGẮN, không giới hạn độ dài câu trả lời, không tóm tắt sơ sài. Hãy phân tích thấu đáo mọi khía cạnh của vấn đề.
+- Trình bày hoàn toàn bằng tiếng Việt chuẩn xác, sử dụng định dạng Markdown rõ ràng (tiêu đề ###, gạch đầu dòng -, in đậm **từ khóa**).`;
+      } else {
+        userMsg = `TÀI LIỆU GỐC (${lessonTitle}):\n"""\n${payload.fullText}\n"""\n\nCÁC ĐOẠN NGƯỜI HỌC ĐÃ HIGHLIGHT:\n${payload.highlights && payload.highlights.length ? payload.highlights.map(h => `- ${h}`).join('\n') : '(Chưa có)'}\n\nGHI CHÚ CỦA NGƯỜI HỌC (TAKE-NOTES):\n${payload.notes || '(Chưa có)'}\n\nYÊU CẦU: Dựa hoàn toàn vào tài liệu gốc, hãy: (1) Điền tiếp và hoàn thiện các bullet points ghi chú của người học thành các ý sâu sắc, mạch lạc; (2) Giải thích chi tiết các đoạn highlight dưới dạng các bullet points rõ ràng; (3) Đúc kết 3-5 bài học cốt lõi. TUYỆT ĐỐI KHÔNG CẮT NGẮN, trả lời đầy đủ toàn bộ nội dung.`;
+
+        sysPrompt = `Bạn là trợ lý học tập AI chuyên sâu. Dựa HOÀN TOÀN vào tài liệu gốc để: (1) Hoàn thiện các bullet points ghi chú của người học; (2) Giải thích chi tiết các đoạn highlight; (3) Đúc kết các bài học cốt lõi. TUYỆT ĐỐI KHÔNG CẮT NGẮN, không giới hạn độ dài, trình bày bằng tiếng Việt, định dạng Markdown rõ ràng.`;
+      }
+
+      const body = {
+        contents: [{ role: 'user', parts: [{ text: userMsg }] }],
+        systemInstruction: { parts: [{ text: sysPrompt }] },
+        generationConfig: { 
+          temperature: 0.4, 
+          maxOutputTokens: 8192 // GỠ TOÀN BỘ GIỚI HẠN: 8192 TOKENS (Độ dài tối đa của Gemini Flash)
+        }
+      };
+
+      let lastErr = null;
+      for (let m of uniqueModels) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`;
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          const data = await res.json();
+          if (res.ok && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+            return data.candidates[0].content.parts[0].text;
+          }
+          if (data.error) {
+            lastErr = new Error(`Gemini API: ${data.error.message || JSON.stringify(data.error)}`);
+            // If API key is invalid, break immediately
+            if (data.error.message && (data.error.message.includes('API key not valid') || data.error.message.includes('API_KEY_INVALID'))) {
+              throw lastErr;
+            }
+            // If model is not found, continue loop to try next model in uniqueModels!
+          }
+        } catch (err) {
+          lastErr = err;
+          if (err.message && (err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID'))) {
+            throw err;
+          }
+        }
+      }
+      throw lastErr || new Error('Không thể kết nối tới Google Gemini API.');
+    }
+
+
+    // ================= CENTRAL AI SYNTHESIS WORKFLOW (POSTS DIRECTLY TO CHAT) =================
+    async function triggerAiSynthesis(contextLabel, onProceedCallback = null) {
+      // 1. Ensure Right Sidebar (Chat + Notes) is open
+      if (typeof openSidebar === 'function') {
+        openSidebar();
+      }
+
+      const userNotes = noteInput.value.trim();
+      const currentHighlights = typeof getActiveHighlights === 'function' ? getActiveHighlights() : [];
+
+      // 2. Post User Request into Chat
+      const userPrompt = `⚡ **[Tổng hợp bài học]** Nhờ Trợ lý AI tổng hợp lại nội dung tôi đã ghi chú và highlight trong ${contextLabel}. Hãy đối chiếu tài liệu gốc để điền nốt các bullet points và giải thích các phần highlight.`;
+      appendMessage('user', userPrompt);
+
+      // 3. Post Loading Bubble into Chat
+      const loadingBubbleId = 'ai-loading-' + Date.now();
+      const loadingBubble = document.createElement('div');
+      loadingBubble.id = loadingBubbleId;
+      loadingBubble.className = 'chat-bubble assistant';
+      loadingBubble.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="ai-pulse-dot" style="font-size:16px;">✦</span>
+          <span><strong>Gemini Flash</strong> đang đọc tài liệu, đối chiếu ghi chú và phân tích các đoạn highlight...</span>
+        </div>
+      `;
+      chatMessages.appendChild(loadingBubble);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // 4. Call Gemini Synthesis
+      try {
+        const synthesisResult = await executeGeminiSynthesis();
+        latestSynthesisResult = synthesisResult;
+
+        // Remove loading bubble
+        const existingLoading = document.getElementById(loadingBubbleId);
+        if (existingLoading) existingLoading.remove();
+
+        // 5. Post Synthesis Result into Chat
+        const responseBubble = document.createElement('div');
+        responseBubble.className = 'chat-bubble assistant';
+        
+        let proceedBtnHtml = '';
+        if (typeof onProceedCallback === 'function') {
+          proceedBtnHtml = `<button class="chat-action-btn primary" id="btnChatProceed-${Date.now()}">Tiếp tục chuyển bài ➔</button>`;
+        }
+
+        responseBubble.innerHTML = `
+          <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #e2e8f0; font-size:12px; color:#1d4ed8; font-weight:700;">
+            <span>✨</span> Gemini Flash · Tổng hợp & Hoàn thiện kiến thức [${contextLabel}]
+          </div>
+          <div class="synthesis-text-body">
+            ${renderMarkdownToHtml(synthesisResult)}
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; padding-top:8px; border-top:1px dashed #cbd5e1;">
+            <button class="chat-action-btn" id="btnChatAppendNotes-${Date.now()}">📋 Thêm vào ghi chú của tôi</button>
+            ${proceedBtnHtml}
+          </div>
+        `;
+        chatMessages.appendChild(responseBubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Hook action buttons in the chat bubble
+        const appendBtn = responseBubble.querySelector('button[id^="btnChatAppendNotes-"]');
+        if (appendBtn) {
+          appendBtn.addEventListener('click', () => {
+            const formatted = `\n\n### 🤖 AI Tổng hợp [${contextLabel}]:\n${synthesisResult}\n`;
+            noteInput.value = noteInput.value + formatted;
+            saveUserNotes();
+            updateCounter();
+            showHighlightToast('✓ Đã thêm tổng hợp vào Ghi chú!');
+            appendBtn.textContent = '✓ Đã thêm vào ghi chú';
+            appendBtn.disabled = true;
+          });
+        }
+
+        const proceedBtn = responseBubble.querySelector('button[id^="btnChatProceed-"]');
+        if (proceedBtn) {
+          proceedBtn.addEventListener('click', () => {
+            onProceedCallback();
+          });
+        }
+
+      } catch (err) {
+        // Remove loading bubble
+        const existingLoading = document.getElementById(loadingBubbleId);
+        if (existingLoading) existingLoading.remove();
+
+        // Determine if error is API_KEY_INVALID or connection error
+        const isKeyError = err.message.includes('API key not valid') || err.message.includes('API_KEY_INVALID') || err.message.includes('400');
+        
+        // Generate In-Context Offline Synthesis fallback so user is never left without answer!
+        const offlineSynthesis = generateOfflineSynthesis(currentLesson, userNotes, currentHighlights);
+
+        const errorBubble = document.createElement('div');
+        errorBubble.className = 'chat-bubble assistant';
+        errorBubble.innerHTML = `
+          <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:12px 14px; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:6px; color:#b91c1c; font-weight:700; font-size:13px; margin-bottom:6px;">
+              <span>⚠️</span> ${isKeyError ? 'API Key chưa chính xác (Cần Google AI Studio Key)' : 'Chưa kết nối được API Gemini trực tuyến'}
+            </div>
+            <p style="font-size:12.5px; color:#7f1d1d; line-height:1.5; margin-bottom:8px;">
+              ${isKeyError 
+                ? 'Key trong <code>.env</code> hiện tại không phải là Google Gemini API Key chuẩn (Google Gemini Key thường bắt đầu bằng <code>AIzaSy...</code> có 39 ký tự).' 
+                : err.message}
+            </p>
+            <div style="display:flex; gap:8px;">
+              <button class="chat-action-btn" onclick="document.getElementById('geminiKeyModal').classList.add('active');" style="background:#ffffff; color:#b91c1c; border-color:#fca5a5;">⚙️ Cập nhật API Key</button>
+              <a href="https://aistudio.google.com/" target="_blank" class="chat-action-btn" style="text-decoration:none; color:#1d4ed8;">Lấy key miễn phí ↗</a>
+            </div>
+          </div>
+
+          <div style="padding:4px 0;">
+            <div style="font-size:12px; color:#15803d; font-weight:700; margin-bottom:6px;">
+              💡 [Bản tổng hợp dự phòng cục bộ từ tài liệu]:
+            </div>
+            ${renderMarkdownToHtml(offlineSynthesis)}
+          </div>
+        `;
+        chatMessages.appendChild(errorBubble);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        if (typeof onProceedCallback === 'function') {
+          // Provide proceed button
+          const proceedBtnContainer = document.createElement('div');
+          proceedBtnContainer.style.marginTop = '8px';
+          proceedBtnContainer.innerHTML = `<button class="chat-action-btn primary">Tiếp tục chuyển bài ➔</button>`;
+          proceedBtnContainer.querySelector('button').addEventListener('click', () => {
+            onProceedCallback();
+          });
+          errorBubble.appendChild(proceedBtnContainer);
+        }
+      }
+    }
+
+    // Offline In-Context Synthesis Generator (Fallback when API key is missing or offline)
+    function generateOfflineSynthesis(lesson, notes, highlights) {
+      if (lesson === 'mcp') {
+        return `### 📌 Hoàn thiện các bullet points ghi chú:
+- **Quản lý ngữ cảnh là trò chơi của thông tin (The Context Management Game):** Cửa sổ ngữ cảnh (Context window) lớn không đảm bảo quyết định đúng; quan trọng là nguyên tắc: *Đúng ngữ cảnh, Đúng tác nhân, Đúng thời điểm (Right context, Right actor, Right time)*.
+- **MCP & Phân định ranh giới:** MCP chỉ đóng vai trò điều hướng quyền truy cập (*routes access*). Việc quyết định workflow thuộc về Orchestration.
+- **Context Contract của Sub-agent:** Mọi sub-agent đều cần hợp đồng ngữ cảnh rõ ràng: *Noise đi ra · Evidence quay về*.
+
+### 🔍 Giải thích các phần Highlight:
+${highlights.length > 0 ? highlights.map(h => `- **"${h}":** Điểm nhấn then chốt trong kiến trúc Multi-Agent nhằm tránh bẫy "Copy -> Paste -> Explain -> Hope". Cần kiểm chứng mọi bước đi bằng bằng chứng xác thực.`).join('\n') : '- *(Chưa có phần highlight cụ thể trong phiên đọc này)*'}
+
+### 💡 3 Bài học cốt lõi (Key Takeaways):
+1. **Scope & Isolate:** Luôn thu hẹp và cô lập dữ liệu trước khi hành động.
+2. **Authority & Feedback loop:** Agent chỉ giải quyết được task khi có đủ quyền hạn và vòng lặp phản hồi.
+3. **Verify by Evidence:** Mọi kết luận của Agent phải được kiểm chứng bằng file, test hoặc diff thực tế.`;
+      } else {
+        const curSlide = slidesData[currentSlideIndex];
+        return `### 📌 Hoàn thiện các bullet points ghi chú [Slide ${curSlide.slide_num}: ${curSlide.clean_title}]:
+- **Outcome over Output:** Sản phẩm tốt không đo bằng số lượng tính năng (Output) mà đo bằng giá trị thực tế tạo ra cho người dùng và tăng trưởng bền vững cho tổ chức (Outcome).
+- **Thấu hiểu nỗi đau khách hàng:** Bắt đầu từ bài toán của người dùng, không bắt đầu từ giải pháp công nghệ.
+- **Khung tư duy Cây Cơ hội - Giải pháp (OST):** Liên kết trực tiếp mục tiêu kinh doanh ➔ cơ hội từ khách hàng ➔ giải pháp giả thuyết ➔ thử nghiệm.
+
+### 🔍 Giải thích các phần Highlight:
+${highlights.length > 0 ? highlights.map(h => `- **"${h}":** Trọng tâm bài học trong Slide ${curSlide.slide_num}. Nhấn mạnh rằng công nghệ hay AI chỉ là công cụ hỗ trợ, tư duy giải quyết vấn đề của PM mới quyết định thành bại của sản phẩm.`).join('\n') : '- *(Chưa có phần highlight cụ thể trong phiên đọc này)*'}
+
+### 💡 3 Bài học cốt lõi (Key Takeaways):
+1. Đặt mục tiêu Outcome rõ ràng trước khi code hay làm tính năng.
+2. Tìm giải pháp từ nỗi đau thực tế của khách hàng.
+3. Thử nghiệm nhanh với chi phí thấp nhất để kiểm chứng giả thuyết.`;
+      }
+    }
+
+    // Offline In-Depth Chat Response Generator (Exhaustive & Uncapped)
+    function generateOfflineChatReply(query, lesson) {
+      const qLower = query.toLowerCase();
+      if (lesson === 'mcp') {
+        if (qLower.includes('5 bước') || qLower.includes('the game') || qLower.includes('quản lý ngữ cảnh')) {
+          return `### 🎮 5 Bước Quản lý Ngữ cảnh trong "The Context Management Game":
+
+Trong kiến trúc Multi-Agent hiện đại, quản lý ngữ cảnh là bài toán sống còn để tránh bẫy *"Context Rot"* (ngữ cảnh bị phân rã, loãng hoặc tràn). 5 bước tuần tự bao gồm:
+
+1. **Acquire (Thu thập):**
+   - Lắng nghe và tiếp nhận thông tin đầu vào từ người dùng hoặc hệ thống.
+   - Nhận diện các điểm neo dữ liệu (anchors) thay vì vội vàng tải toàn bộ cơ sở dữ liệu vào prompt.
+
+2. **Scope (Xác định phạm vi & Lọc nhiễu):**
+   - Lọc bỏ các thông tin rác, chỉ giữ lại các tín hiệu có giá trị liên quan trực tiếp đến nhiệm vụ.
+   - Thu hẹp không gian tìm kiếm xuống tập hợp nhỏ nhất có thể giải quyết được vấn đề.
+
+3. **Isolate (Cô lập dữ liệu):**
+   - Đưa dữ liệu vào các ranh giới xử lý độc lập (sandbox, sub-agent context).
+   - Đảm bảo mỗi agent chỉ nhìn thấy phần dữ liệu thuộc phạm vi trách nhiệm của nó.
+
+4. **Act (Hành động):**
+   - Thực thi các thao tác thông qua công cụ chuyên biệt (tool calls, file writes, code executions).
+   - Mỗi hành động phải có mục tiêu xác định và có thể đo lường.
+
+5. **Verify (Kiểm chứng nước đi):**
+   - Kiểm tra kết quả dựa trên **bằng chứng thực tế (Evidence)**: test run, build logs, diffs, API response.
+   - *Nguyên tắc cốt lõi:* Không bao giờ chấp nhận giả định của model nếu thiếu evidence kiểm chứng.`;
+        } else if (qLower.includes('công thức') || qLower.includes('agent =')) {
+          return `### 🤖 Công thức Toàn diện của một AI Agent:
+
+$$\\text{Agent} = \\text{Model} + \\text{Instructions} + \\text{Context} + \\text{Tools} + \\text{Authority} + \\text{Feedback loop}$$
+
+Phân tích chi tiết từng thành tố:
+- **Model (Mô hình nền tảng):** Bộ não suy luận (Reasoning Engine), ví dụ: Gemini 2.5 Flash. Model chỉ là động cơ, không tự tạo thành agent nếu thiếu môi trường.
+- **Instructions (Chỉ dẫn hệ thống):** Định hình tính cách, vai trò, tiêu chuẩn hành vi và các quy tắc ranh giới bắt buộc phải tuân theo.
+- **Context (Ngữ cảnh):** Dữ liệu động được nạp đúng lúc theo nguyên tắc *"Right context, Right actor, Right time"*.
+- **Tools (Công cụ):** Khả năng tương tác với thế giới bên ngoài (đọc/ghi file, gọi MCP server, duyệt web, chạy lệnh bash).
+- **Authority (Quyền hạn):** Ranh giới những gì agent ĐƯỢC PHÉP và KHÔNG ĐƯỢC PHÉP làm (phê duyệt ghi đè file, chạy code, gửi dữ liệu ra ngoài).
+- **Feedback Loop (Vòng lặp phản hồi):** Cơ chế quan trọng nhất để sửa sai. Agent thực thi ➔ nhận kết quả ➔ phát hiện lỗi ➔ tự điều chỉnh chiến lược tiếp theo.`;
+        } else if (qLower.includes('routes access') || qLower.includes('mcp')) {
+          return `### 🔌 Bản chất của MCP (Model Context Protocol): "Routes Access, Not Workflow"
+
+Tài liệu *mcp-multi-agent.md* nhấn mạnh một quan điểm kiến trúc cực kỳ cốt lõi:
+
+#### 1. MCP chỉ điều hướng quyền truy cập (Routes Access)
+- **Host (Ứng dụng chủ):** Môi trường điều hành (như IDE, Codex app).
+- **Client:** Đảm nhiệm kết nối, xác thực định danh (Auth) và quản lý sự đồng thuận của người dùng (Consent).
+- **Server:** Đóng gói tài nguyên (Resources), công cụ (Tools) và hành động (Prompts/Actions) từ các hệ thống bên thứ ba (GitHub, Postgres, Figma, Browser).
+- MCP chuẩn hóa giao thức kết nối I/O nhưng **hoàn toàn trung lập với luồng công việc (Workflow)**.
+
+#### 2. Orchestration quyết định Workflow
+- Việc xác định agent nào được gọi tool gì, thứ tự thực thi ra sao, và khi nào cần bàn giao nhiệm vụ thuộc về tầng điều phối (Orchestration Layer).
+- **Lưu ý thực chiến:** Không bật mọi server MCP cho mọi agent. Mỗi công cụ thêm vào đều kéo theo chi phí token, schema noise và tăng bề mặt lỗi (failure surface).`;
+        } else if (qLower.includes('sub-agent') || qLower.includes('contract')) {
+          return `### 🛡️ Context Contract của Sub-agent trong Kiến trúc Multi-Agent
+
+Nguyên tắc vàng: **"Noise đi ra · Evidence quay về"**.
+
+Để các sub-agent hoạt động song song mà không làm tràn context của agent chính, mỗi sub-agent phải có một **Context Contract** chặt chẽ gồm 6 điều khoản:
+
+1. **Mục tiêu (Goal):** Nhiệm vụ đơn nhất, cụ thể, không đa nghĩa.
+2. **Starting Context:** Chỉ cung cấp lượng thông tin tối thiểu cần thiết để bắt đầu công việc.
+3. **Allowed Tools:** Giới hạn nghiêm ngặt danh sách các công cụ được cấp phép sử dụng.
+4. **Write Scope:** Quy định rõ file nào, thư mục nào hoặc database nào được phép chỉnh sửa.
+5. **Approval Rules:** Quy tắc yêu cầu xác nhận trước khi thực hiện các hành động có tính rủi ro cao.
+6. **Required Output:** Định dạng kết quả trả về bắt buộc (báo cáo tóm tắt kèm bằng chứng kiểm chứng, không dump toàn bộ log thô).`;
+        } else {
+          return `### 📘 Tổng quan Kiến trúc MCP & Quản lý Ngữ cảnh (mcp-multi-agent.md)
+
+Theo tài liệu bài học, 3 nguyên tắc nền tảng bao gồm:
+
+1. **The Core Philosophy:** *"Right context, Right actor, Right time"* (Đúng ngữ cảnh, đúng tác nhân, đúng thời điểm). Tăng kích thước cửa sổ context không đồng nghĩa với việc AI sẽ ra quyết định thông minh hơn nếu context chứa nhiều nhiễu.
+2. **Vấn đề Web-Dev:** Xóa bỏ quy trình thủ công *"Copy → Paste → Explain → Hope"* bằng việc tích hợp MCP kết nối trực tiếp với nguồn dữ liệu gốc (Single Source of Truth).
+3. **Mô hình 5 trụ cột:**
+   - **Harness:** Thiết kế môi trường chuẩn.
+   - **MCP:** Điều hướng quyền truy cập an toàn.
+   - **Agents:** Thực thi công việc cụ thể.
+   - **Sub-agents:** Cô lập trách nhiệm và ngữ cảnh.
+   - **Evidence:** Xác thực mọi kết quả bằng bằng chứng cụ thể.`;
+        }
+      } else {
+        const curSlide = slidesData[currentSlideIndex];
+        if (qLower.includes('outcome') || qLower.includes('output') || qLower.includes('khác biệt')) {
+          return `### 🎯 Phân biệt Chi tiết: Outcome vs Output trong Quản trị Sản phẩm (Product Management)
+
+Dựa trên tài liệu bài giảng *tu-duy-product.pdf*:
+
+#### 1. Định nghĩa & Bản chất
+- **Output (Đầu ra):**
+  - Là số lượng tính năng, màn hình, dòng code hoặc sản phẩm bàn giao thực tế (features shipped, deliverables).
+  - *Ví dụ:* PM cho ra mắt thêm 5 bộ filter mới, làm lại giao diện trang chủ, tích hợp thêm cổng thanh toán.
+  - *Nguy cơ:* Bẫy "Feature Factory" – đội ngũ làm việc cật lực để ra mắt hàng loạt tính năng nhưng người dùng không sử dụng, doanh nghiệp không tăng trưởng.
+
+- **Outcome (Kết quả):**
+  - Là sự thay đổi trong **hành vi của người dùng** mang lại giá trị đo lường được cho doanh nghiệp.
+  - *Ví dụ:* Tỷ lệ hoàn tất đơn hàng tăng 15%, số ngày hoạt động trung bình mỗi tháng tăng từ 8 lên 14 ngày.
+
+#### 2. Phân loại 3 cấp độ Outcome
+1. **Business Outcome:** Doanh thu, lợi nhuận, chi phí vận hành, thị phần (Chỉ số tài chính/vĩ mô).
+2. **Product Outcome:** Các hành vi đo lường được trong ứng dụng tạo ra Business Outcome (tần suất login, thời gian tương tác, tỷ lệ click checkout).
+3. **Customer Outcome (Traction):** Nỗi đau của khách hàng được giải quyết, giúp họ đạt được mong muốn dễ dàng hơn.
+
+#### 3. Tư duy cốt lõi của PM
+Một Product Manager xuất sắc luôn tập trung vào **Outcome over Output**: Tối thiểu hóa số lượng Output cần làm mà vẫn tối đa hóa được Outcome đạt được.`;
+        } else if (qLower.includes('ost') || qLower.includes('cơ hội') || qLower.includes('teresa')) {
+          return `### 🌳 Cây Cơ hội - Giải pháp (Opportunity Solution Tree - OST)
+
+Cây Cơ hội - Giải pháp (OST) do Teresa Torres đề xuất là khung tư duy trực quan hóa toàn bộ quá trình Product Discovery:
+
+#### 1. Cấu trúc 4 tầng của OST:
+- **Tầng 1: Desired Outcome (Mục tiêu mong muốn):** Điểm khởi đầu duy nhất, ví dụ: Tăng retention tuần đầu tiên lên 30%.
+- **Tầng 2: Opportunity Space (Không gian cơ hội):** Các nỗi đau, mong muốn, nhu cầu chưa được đáp ứng của người dùng (Customer pain points & needs).
+- **Tầng 3: Solutions (Các giải pháp tiềm năng):** Nhiều giải pháp khác nhau cho cùng một cơ hội, không được gắn chặt vào một ý tưởng duy nhất.
+- **Tầng 4: Assumption Tests (Thử nghiệm giả thuyết):** Các bài kiểm tra nhỏ, nhanh, chi phí thấp để xác thực xem giải pháp có thực sự giải quyết cơ hội hay không.
+
+#### 2. Giá trị thực chiến cho PM:
+- Tránh hội chứng "nhảy cóc thẳng vào giải pháp" (Jumping to solutions).
+- Đảm bảo mọi tính năng được phát triển đều có đường dẫn logic trực tiếp dẫn về mục tiêu tăng trưởng của tổ chức.`;
+        } else if (qLower.includes('momo') || qLower.includes('heo đất')) {
+          return `### 🐷 Phân tích Thực chiến: Case Study Heo Đất MoMo
+
+Trong bài giảng *tu-duy-product.pdf*, Case Study Heo Đất MoMo là ví dụ điển hình về việc kiến tạo Product Outcome xuất sắc:
+
+#### 1. Bối cảnh & Bài toán
+- **Tập người dùng:** Khách hàng phổ thông, học sinh, sinh viên, người có thu nhập trung bình. Họ có lòng hảo tâm nhưng không có sẵn số tiền lớn để quyên góp từ thiện thường xuyên.
+- **Rào cản tâm lý:** Nhiều người ngại chuyển 2.000đ hay 5.000đ từ thiện vì cảm thấy số tiền quá nhỏ.
+
+#### 2. Giải pháp sáng tạo của MoMo
+- Thay vì yêu cầu chuyển tiền thật, MoMo xây dựng cơ chế **"Quyên góp bằng hành động"**:
+  - Người dùng nuôi heo ảo, cho heo ăn thức ăn tích lũy qua các thao tác hàng ngày (đi bộ, thanh toán, chuyển tiền, đăng nhập).
+  - Doanh nghiệp tài trợ (nhà hảo tâm lớn) sẽ quy đổi số thức ăn/heo vàng đó thành tiền mặt thực tế để xây trường học, mổ tim.
+
+#### 3. Product Outcome đạt được
+- Tăng mạnh **Daily Active Users (DAU)** và số ngày mở app hàng tháng (Login Frequency).
+- Biến một hành động từ thiện khô khan thành một thói quen tích cực, gắn kết tình cảm sâu sắc giữa người dùng và ứng dụng ví MoMo.`;
+        } else {
+          return `### 📖 Phân tích Chi tiết: Slide ${curSlide.slide_num} (${curSlide.clean_title})
+
+Dựa trên toàn văn nội dung Slide ${curSlide.slide_num} trong tài liệu *tu-duy-product.pdf*:
+
+#### 1. Nội dung cốt lõi của Slide:
+${curSlide.clean_content.map(c => `- ${c}`).join('\n')}
+
+#### 2. Phân tích chiều sâu từ góc độ Product:
+- Slide này tập trung làm rõ ranh giới giữa việc làm tính năng theo cảm tính và việc giải quyết bài toán thực tế có đo lường.
+- Mỗi quyết định sản phẩm cần phải trả lời câu hỏi: *Điều này tác động như thế nào đến hành vi của khách hàng và chỉ số của tổ chức?*
+
+#### 3. Bài học thực hành cho người học:
+- Không bắt đầu từ công nghệ hay giải pháp; hãy bắt đầu từ việc thấu hiểu nỗi đau sâu kín nhất của người dùng.
+- Liên tục đo lường và kiểm chứng các giả thuyết trước khi đầu tư nguồn lực kỹ thuật lớn để xây dựng.`;
+        }
+      }
+    }
+
+    // Connect Gemini API Key Modal Controls
+    if (btnGeminiSettings) {
+      btnGeminiSettings.addEventListener('click', () => {
+        const savedKey = localStorage.getItem('gemini_api_key') || (typeof window.__ENV === 'object' && window.__ENV ? window.__ENV.GEMINI_API_KEY : '') || '';
+        if (inputClientApiKey) inputClientApiKey.value = savedKey;
+        geminiKeyModal.classList.add('active');
+      });
+    }
+
+    if (btnCloseKeyModal) {
+      btnCloseKeyModal.addEventListener('click', () => {
+        geminiKeyModal.classList.remove('active');
+      });
+    }
+
+    if (btnSaveKey) {
+      btnSaveKey.addEventListener('click', () => {
+        const key = inputClientApiKey ? inputClientApiKey.value.trim() : '';
+        if (key) {
+          localStorage.setItem('gemini_api_key', key);
+          showHighlightToast('✓ Đã lưu API Key thành công!');
+        } else {
+          localStorage.removeItem('gemini_api_key');
+          showHighlightToast('Đã để trống API Key');
+        }
+        geminiKeyModal.classList.remove('active');
+      });
+    }
+
+    if (btnClearKey) {
+      btnClearKey.addEventListener('click', () => {
+        localStorage.removeItem('gemini_api_key');
+        if (inputClientApiKey) inputClientApiKey.value = '';
+        showHighlightToast('🗑️ Đã xóa API Key lưu trên máy');
+      });
+    }
+
+    // Connect btnSynthesizeNow (nudgeBox button) directly to triggerAiSynthesis
+    btnSynthesizeNow.onclick = (e) => {
+      e.preventDefault();
+      nudgeBox.style.display = 'none';
+      const label = currentLesson === 'pdf' ? `Slide ${currentSlideIndex + 1} (PDF)` : 'MCP Multi-Agent';
+      triggerAiSynthesis(label);
+    };
+
+    // Connect btnConfirmSynthesize: Immediately switch to target AND trigger AI synthesis!
+    if (btnConfirmSynthesize) {
+      btnConfirmSynthesize.onclick = (e) => {
+        e.preventDefault();
+        synthesizeConfirmModal.classList.remove('active');
+        const label = currentLesson === 'pdf' ? `Slide ${currentSlideIndex + 1} (PDF)` : 'MCP Multi-Agent';
+        const proceedFn = pendingNavigationAction;
+        pendingNavigationAction = null;
+
+        // 1. Immediately switch to destination lesson/slide!
+        if (typeof proceedFn === 'function') {
+          proceedFn();
+        }
+
+        // 2. Trigger AI synthesis in the chat panel!
+        triggerAiSynthesis(label);
+      };
+    }
+
+
+    // Hook Navigation Interceptors into switchLesson & renderSlide
+    // 1. Menu switching (clean onclick without replacing nodes):
+    const mItem1 = document.getElementById('menuItem1');
+    const mItem2 = document.getElementById('menuItem2');
+
+    if (mItem1) {
+      mItem1.onclick = () => {
+        if (currentLesson === 'pdf') return;
+        interceptNavigation('Bài 1 (Tư duy product)', () => {
+          switchLesson('pdf');
+        });
+      };
+    }
+
+    if (mItem2) {
+      mItem2.onclick = () => {
+        if (currentLesson === 'mcp') return;
+        interceptNavigation('Bài 2 (MCP Multi Agent)', () => {
+          switchLesson('mcp');
+        });
+      };
+    }
+
+    // 2. Slide Navigation buttons interceptor in Lesson 1:
+    const originalRenderSlide = renderSlide;
+    function navigateToSlide(targetIdx, direction = 'next') {
+      if (targetIdx === currentSlideIndex || targetIdx < 0 || targetIdx >= slidesData.length) return;
+      interceptNavigation(`Slide ${targetIdx + 1}`, () => {
+        originalRenderSlide(targetIdx, direction);
+      });
+    }
+
+    // Rebind slide buttons with interceptor
+    btnPrevSlide.onclick = (e) => {
+      e.preventDefault();
+      navigateToSlide(currentSlideIndex - 1, 'prev');
+    };
+    stagePrevBtn.onclick = (e) => {
+      e.preventDefault();
+      navigateToSlide(currentSlideIndex - 1, 'prev');
+    };
+
+    btnNextSlide.onclick = (e) => {
+      e.preventDefault();
+      navigateToSlide(currentSlideIndex + 1, 'next');
+    };
+    stageNextBtn.onclick = (e) => {
+      e.preventDefault();
+      navigateToSlide(currentSlideIndex + 1, 'next');
+    };
+
+    slideSelect.onchange = (e) => {
+      const idx = parseInt(e.target.value, 10);
+      navigateToSlide(idx, idx > currentSlideIndex ? 'next' : 'prev');
+    };
+
+    // Rebind thumbnails
+    thumbnailsStrip.querySelectorAll('.thumb-card').forEach((thumb, idx) => {
+      thumb.onclick = (e) => {
+        e.preventDefault();
+        navigateToSlide(idx, idx > currentSlideIndex ? 'next' : 'prev');
+      };
+    });
+
+  </script>
+
+  
+  <!-- Modal 1: Xác nhận tổng hợp kiến thức khi chuyển bài / phần mới -->
+  <div class="ai-modal-backdrop" id="synthesizeConfirmModal">
+    <div class="ai-modal-box">
+      <div class="ai-modal-header">
+        <div class="ai-modal-badge">
+          <span style="font-size: 15px;">✨</span>
+          <span>Trợ lý AI Gemini 3.5 Flash</span>
+        </div>
+        <button class="ai-modal-close" id="btnCloseConfirmModal">✕</button>
+      </div>
+
+      <div class="ai-modal-body">
+        <h3 class="ai-modal-question">Bạn có muốn tổng hợp lại nội dung đã note và highlight không?</h3>
+        <p class="ai-modal-desc">
+          Hệ thống phát hiện bạn đã có ghi chú và đoạn bôi đen quan trọng. Gemini 3.5 Flash sẽ đối chiếu toàn văn tài liệu gốc để <strong>điền tiếp các bullet points</strong> và <strong>giải thích chi tiết các phần highlight</strong>.
+        </p>
+
+        <div class="ai-modal-tags" id="synthesizeContextTags">
+          <span class="ai-tag tag-notes" id="modalTagNotes">📝 0 ý ghi chú</span>
+          <span class="ai-tag tag-hl" id="modalTagHl">🖍️ 0 đoạn highlight</span>
+          <span class="ai-tag tag-source" id="modalTagSource">📑 Bài học hiện tại</span>
+        </div>
+      </div>
+
+      <div class="ai-modal-footer">
+        <button class="modal-btn btn-secondary" id="btnSkipSynthesize">
+          Không, chuyển tiếp
+        </button>
+        <button class="modal-btn btn-primary" id="btnConfirmSynthesize">
+          <span>✨</span> Có, tổng hợp ngay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Kết quả tổng hợp AI -->
+  <div class="ai-modal-backdrop" id="synthesizeResultModal">
+    <div class="ai-modal-box ai-modal-lg">
+      <div class="ai-modal-header">
+        <div class="ai-modal-badge success">
+          <span>🤖</span>
+          <span id="synthesisModalTitle">Gemini 3.5 Flash · Tổng hợp & Bổ sung kiến thức</span>
+        </div>
+        <button class="ai-modal-close" id="btnCloseResultModal">✕</button>
+      </div>
+
+      <!-- Loading State -->
+      <div class="ai-modal-loading" id="synthesisLoadingView">
+        <div class="ai-spinner"></div>
+        <h4 style="font-size:16px; color:#0f172a; margin-bottom:6px;">Đang kết nối Gemini 3.5 Flash...</h4>
+        <p style="font-size:13px; color:#64748b;">Đang đọc tài liệu gốc, hoàn thiện các ý ghi chú và giải thích các phần highlight của bạn dưới dạng bullet points...</p>
+      </div>
+
+      <!-- Result State -->
+      <div class="ai-modal-result-content" id="synthesisResultContent" style="display: none;">
+      </div>
+
+      <div class="ai-modal-footer" id="synthesisResultFooter" style="display: none;">
+        <button class="modal-btn btn-secondary" id="btnAppendToNotes">
+          📋 Thêm vào ghi chú của tôi
+        </button>
+        <button class="modal-btn btn-secondary" id="btnSendToChat">
+          💬 Gửi vào khung Chat AI
+        </button>
+        <button class="modal-btn btn-primary" id="btnProceedNavigation">
+          Tiếp tục chuyển bài ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Cài đặt Gemini API Key -->
+  <div class="ai-modal-backdrop" id="geminiKeyModal">
+    <div class="ai-modal-box">
+      <div class="ai-modal-header">
+        <div class="ai-modal-badge">
+          <span>⚙️</span>
+          <span>Cấu hình Gemini 3.5 Flash API Key</span>
+        </div>
+        <button class="ai-modal-close" id="btnCloseKeyModal">✕</button>
+      </div>
+
+      <div class="ai-modal-body">
+        <p style="font-size: 13.5px; color: #475569; margin-bottom: 12px; line-height: 1.5;">
+          Hệ thống tự động đọc API Key từ file <code>.env</code> khi bạn chạy <code>python3 server.py</code>. Nếu mở trực tiếp qua trình duyệt, bạn cũng có thể dán key vào đây:
+        </p>
+        <input type="password" id="inputClientApiKey" placeholder="Nhập API Key: AIzaSy..." style="width: 100%; box-sizing:border-box; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: monospace;" />
+        <p style="font-size: 12px; color: #64748b; margin-top: 8px; line-height: 1.5;">
+          💡 Lấy API key miễn phí tại: <a href="https://aistudio.google.com/" target="_blank" style="color: #2563eb; font-weight: 500;">Google AI Studio</a>. Key được bảo mật an toàn trong file <code>.env</code> (đã cho vào <code>.gitignore</code>).
+        </p>
+      </div>
+
+      <div class="ai-modal-footer">
+        <button class="modal-btn btn-secondary" id="btnClearKey">Xóa Key lưu trên máy</button>
+        <button class="modal-btn btn-primary" id="btnSaveKey">Lưu cấu hình</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
